@@ -7,10 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>69CT 🎃</title>
 <link id="faviconLink" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='4' width='56' height='56' rx='12' fill='%23000000'/%3E%3Cpath d='M14 20h36v20H28l-8 8v-8h-6z' fill='%23ff6b1a'/%3E%3C/svg%3E">
-<script src="https://cdn.tailwindcss.com"></script>
 <style>
 :root {
-  --halloween-bg: none;
   --bg-base: #000000;
   --text-main: #f5f5f5;
   --text-sub: #b0b0b0;
@@ -20,7 +18,7 @@
   --danger: #ef4444;
   --ok: #22c55e;
 }
-* { -webkit-tap-highlight-color: transparent; }
+* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
 html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
 body {
   -webkit-user-select: none; user-select: none;
@@ -31,36 +29,18 @@ body {
 input, textarea, [contenteditable="true"] { -webkit-user-select: text; user-select: text; color: #fff; }
 input::placeholder, textarea::placeholder { color: #777; }
 
-/* ===== 全体 ===== */
 #appContainer {
   display: flex; flex-direction: column; height: 100vh; height: 100dvh;
   max-width: 900px; width: 100%; margin: 0 auto;
-  background-color: var(--bg-base);
-  background-image: var(--halloween-bg);
-  background-repeat: no-repeat;
-  background-position: right bottom;
-  background-size: min(46vw, 380px) auto;
-  position: relative;
+  background: #0a0a0a; position: relative;
 }
-#appContainer::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.65) 100%);
-  pointer-events: none; z-index: 0;
-}
-#appContainer > * { position: relative; z-index: 1; }
-
 #appMain { flex: 1; overflow: hidden; display: flex; flex-direction: column; position: relative; }
-.scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 16px; }
+.scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 16px; -webkit-overflow-scrolling: touch; }
 .scroll-area::-webkit-scrollbar { width: 8px; }
 .scroll-area::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
 
-/* ===== ヘッダー ===== */
 #appHeader {
-  flex-shrink: 0;
-  background: rgba(10,10,10,0.85);
-  backdrop-filter: blur(6px);
-  border-bottom: 2px solid var(--accent);
+  flex-shrink: 0; background: #111; border-bottom: 2px solid var(--accent);
   padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;
   flex-wrap: wrap; gap: 8px; z-index: 50;
 }
@@ -69,7 +49,6 @@ input::placeholder, textarea::placeholder { color: #777; }
 .header-meta { font-size: 11px; color: var(--text-sub); display: flex; align-items: center; gap: 6px; margin-top: 2px; flex-wrap: wrap; }
 .header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 
-/* ===== アバター ===== */
 .avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid #333; background: #111; }
 .avatar-sm { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid #333; background: #111; }
 .avatar-lg { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); background: #111; }
@@ -82,15 +61,14 @@ input::placeholder, textarea::placeholder { color: #777; }
 .online-label.offline { color: var(--text-muted); }
 .online-label .online-dot { width: 8px; height: 8px; border-width: 1px; }
 
-/* ===== チャット一覧 ===== */
 .chat-list { display: flex; flex-direction: column; gap: 6px; }
 .chat-item {
   display: flex; align-items: center; gap: 12px; padding: 12px 14px;
-  background: rgba(17,17,17,0.82); border-radius: 10px; cursor: pointer;
-  border: 1px solid #262626; position: relative; backdrop-filter: blur(4px);
+  background: #141414; border-radius: 10px; cursor: pointer;
+  border: 1px solid #262626; position: relative;
 }
-.chat-item:hover { background: rgba(30,20,10,0.9); border-color: var(--accent); }
-.chat-item.unread { background: rgba(60,25,10,0.85); border-color: var(--accent); }
+.chat-item:hover { background: #1a1208; border-color: var(--accent); }
+.chat-item.unread { background: #2a1508; border-color: var(--accent); }
 .chat-item-avatar-wrap { position: relative; flex-shrink: 0; }
 .chat-item-avatar-wrap .unread-dot { position: absolute; top: -3px; left: 30px; width: 12px; height: 12px; background: var(--danger); border: 2px solid #000; border-radius: 50%; }
 .chat-item-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
@@ -106,17 +84,13 @@ input::placeholder, textarea::placeholder { color: #777; }
 .group-avatars .avatar-sm:nth-child(2) { bottom: 0; right: 0; z-index: 2; }
 .group-avatars .avatar-sm:nth-child(3) { top: 0; right: 0; z-index: 1; width: 22px; height: 22px; }
 
-/* ===== チャットビュー ===== */
 #chatView { display: flex; flex-direction: column; height: 100%; position: relative; }
-.chat-header { flex-shrink: 0; background: rgba(10,10,10,0.88); backdrop-filter: blur(6px); border-bottom: 1px solid #262626; padding: 10px 14px; display: flex; align-items: center; gap: 10px; z-index: 40; }
+.chat-header { flex-shrink: 0; background: #111; border-bottom: 1px solid #262626; padding: 10px 14px; display: flex; align-items: center; gap: 10px; z-index: 40; }
 .chat-header-body { flex: 1; min-width: 0; }
 .chat-header-name { font-size: 16px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .chat-header-meta { font-size: 11px; color: var(--text-sub); display: flex; align-items: center; gap: 6px; margin-top: 1px; }
 
-.chat-messages-wrap {
-  flex: 1; overflow-y: auto; overflow-x: hidden; padding: 16px 14px;
-  background: rgba(0,0,0,0.55);
-}
+.chat-messages-wrap { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 16px 14px; background: #0a0a0a; -webkit-overflow-scrolling: touch; }
 .chat-messages { display: flex; flex-direction: column; gap: 4px; }
 
 .date-divider { display: flex; align-items: center; justify-content: center; margin: 16px 0; position: relative; }
@@ -147,10 +121,7 @@ input::placeholder, textarea::placeholder { color: #777; }
   color: #fff; max-width: 100%;
 }
 .msg-row:not(.mine) .msg-bubble { border-bottom-left-radius: 4px; }
-.msg-row.mine .msg-bubble {
-  background: linear-gradient(135deg, #ff6b1a, #b91c1c);
-  border-color: #ff6b1a; color: #fff; border-bottom-right-radius: 4px;
-}
+.msg-row.mine .msg-bubble { background: #b91c1c; border-color: #ef4444; color: #fff; border-bottom-right-radius: 4px; }
 .msg-row.mine.msg-grouped .msg-bubble { border-bottom-right-radius: 16px; }
 .msg-row:not(.mine).msg-grouped .msg-bubble { border-bottom-left-radius: 16px; }
 .msg-content { white-space: pre-wrap; word-break: break-word; }
@@ -181,7 +152,7 @@ input::placeholder, textarea::placeholder { color: #777; }
 .story-reply-context .txt { min-width: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .read-receipt { font-size: 10px; color: #fbbf24; font-weight: 600; margin-top: 2px; padding: 0 4px; display: flex; align-items: center; gap: 3px; justify-content: flex-end; }
 .edited-label { font-size: 10px; color: var(--text-muted); font-style: italic; }
-.msg-menu-btn { width: 24px; height: 24px; border-radius: 50%; background: rgba(30,30,30,0.95); border: 1px solid #333; color: #ddd; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; flex-shrink: 0; align-self: center; }
+.msg-menu-btn { width: 24px; height: 24px; border-radius: 50%; background: #1e1e1e; border: 1px solid #333; color: #ddd; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; flex-shrink: 0; align-self: center; }
 .msg-bubble-wrap:hover .msg-menu-btn, .msg-menu-btn.open { opacity: 1; }
 @media (hover: none) { .msg-menu-btn { opacity: 0.7; } }
 
@@ -191,14 +162,14 @@ input::placeholder, textarea::placeholder { color: #777; }
 .msg-menu-popup button.danger { color: var(--danger); }
 
 .chat-header-menu-btn { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 7px 11px; cursor: pointer; font-size: 14px; color: #eee; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-.chat-call-btn { background: linear-gradient(135deg, #16a34a, #15803d); border: none; border-radius: 8px; padding: 7px 11px; cursor: pointer; color: #fff; font-weight: 700; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.chat-call-btn { background: #16a34a; border: none; border-radius: 8px; padding: 7px 11px; cursor: pointer; color: #fff; font-weight: 700; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .chat-call-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .chat-header-menu-popup { position: fixed; background: #141414; border: 1px solid #333; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.8); min-width: 200px; z-index: 30000; overflow: hidden; }
 .chat-header-menu-popup button { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; padding: 11px 14px; font-size: 13px; background: none; border: none; cursor: pointer; color: #eee; }
 .chat-header-menu-popup button:hover { background: #1f1f1f; }
 .chat-header-menu-popup button.danger { color: var(--danger); }
 
-.reaction-picker { position: fixed; background: #141414; border: 1px solid #333; border-radius: 9999px; box-shadow: 0 8px 24px rgba(0,0,0,0.8); display: flex; gap: 2px; padding: 6px 8px; z-index: 31000; }
+.reaction-picker { position: fixed; background: #141414; border: 1px solid #333; border-radius: 9999px; box-shadow: 0 8px 24px rgba(0,0,0,0.8); display: flex; gap: 2px; padding: 6px 8px; z-index: 31000; flex-wrap: wrap; max-width: 340px; }
 .reaction-picker button { width: 34px; height: 34px; border-radius: 50%; background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
 #typingIndicatorSlot { min-height: 0; }
@@ -213,13 +184,13 @@ input::placeholder, textarea::placeholder { color: #777; }
 .typing-bubble .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
 @keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-3px); opacity: 1; } }
 
-.chat-input-form { flex-shrink: 0; background: rgba(10,10,10,0.92); backdrop-filter: blur(6px); border-top: 1px solid #262626; padding: 10px 12px; padding-bottom: max(10px, env(safe-area-inset-bottom)); z-index: 40; }
+.chat-input-form { flex-shrink: 0; background: #111; border-top: 1px solid #262626; padding: 10px 12px; padding-bottom: max(10px, env(safe-area-inset-bottom)); z-index: 40; }
 .chat-input-row { display: flex; align-items: flex-end; gap: 8px; }
 .chat-input-wrap { flex: 1; min-width: 0; background: #141414; border-radius: 20px; border: 1px solid #2f2f2f; display: flex; align-items: flex-end; }
 .chat-input-wrap:focus-within { border-color: var(--accent); background: #1a1a1a; }
 #messageInput { flex: 1; border: none; background: transparent; padding: 9px 14px; font-size: 15px; line-height: 1.4; outline: none; resize: none; min-height: 38px; max-height: 140px; font-family: inherit; color: #fff; width: 100%; }
 .chat-input-icon-btn { width: 40px; height: 40px; border-radius: 50%; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #aaa; flex-shrink: 0; }
-.chat-send-btn { background: linear-gradient(135deg, #ff6b1a, #b91c1c); color: #fff; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.chat-send-btn { background: var(--accent); color: #fff; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .chat-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .msg-preview { margin-bottom: 10px; padding: 10px; background: #1a130a; border: 1px solid #4a2a0a; border-radius: 10px; display: none; position: relative; }
@@ -234,26 +205,22 @@ input::placeholder, textarea::placeholder { color: #777; }
 .reply-preview .reply-preview-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11px; color: var(--text-sub); }
 .reply-preview .reply-preview-close { width: 22px; height: 22px; border-radius: 50%; background: var(--danger); color: #fff; border: none; font-size: 12px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 
-/* ===== モーダル ===== */
 .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: flex; align-items: center; justify-content: center; z-index: 20000; padding: 16px; }
 .modal-backdrop.hidden { display: none; }
 .modal-content { background: #121212; border: 1px solid #333; border-radius: 14px; padding: 22px; max-width: 520px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.9); max-height: 90vh; overflow-y: auto; color: #f5f5f5; }
 .modal-content h3 { color: #fff; }
 .modal-content input, .modal-content textarea { background: #1a1a1a; color: #fff; border-color: #333 !important; }
 
-/* ===== ライトボックス ===== */
 #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.96); z-index: 40000; display: none; align-items: center; justify-content: center; padding: 24px; cursor: zoom-out; }
 #lightbox.show { display: flex; }
 #lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
 #lightbox .lightbox-close { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; background: rgba(255,255,255,0.15); border: none; color: #fff; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-/* ===== バナー・トースト ===== */
 #statusBanner { position: fixed; top: 12px; left: 50%; transform: translate(-50%, -150%); z-index: 25000; padding: 10px 20px; font-size: 13px; font-weight: 600; border-radius: 9999px; transition: transform 0.35s, opacity 0.3s; opacity: 0; box-shadow: 0 6px 20px rgba(0,0,0,0.6); white-space: nowrap; max-width: calc(100vw - 32px); overflow: hidden; text-overflow: ellipsis; pointer-events: none; color: #fff; }
 #statusBanner.show { transform: translate(-50%, 0); opacity: 1; }
 #loginToastContainer { position: fixed; top: 60px; right: 16px; z-index: 26000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; max-width: 340px; }
 @keyframes toastSlideIn { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
 
-/* ===== 起動・承認・BAN等 ===== */
 #bootOverlay { position: fixed; inset: 0; background: #000; z-index: 99997; display: flex; align-items: center; justify-content: center; color: #fff; flex-direction: column; gap: 16px; }
 #bootOverlay.hidden { display: none; }
 #bootOverlay .boot-spinner { width: 44px; height: 44px; border: 3px solid #333; border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
@@ -261,10 +228,9 @@ input::placeholder, textarea::placeholder { color: #777; }
 .loading-spinner { display: inline-block; width: 1rem; height: 1rem; border: 2px solid #333; border-top: 2px solid var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 6px; }
 #banOverlay { position: fixed; inset: 0; background: #000; z-index: 99999; display: none; align-items: center; justify-content: center; color: #fff; text-align: center; flex-direction: column; padding: 20px; }
 #banOverlay.show { display: flex; }
-#pendingApprovalOverlay { position: fixed; inset: 0; background: linear-gradient(135deg, #0a0a0a, #1a0a05); z-index: 99998; display: none; align-items: center; justify-content: center; color: #fff; flex-direction: column; padding: 24px; text-align: center; }
+#pendingApprovalOverlay { position: fixed; inset: 0; background: #0a0a0a; z-index: 99998; display: none; align-items: center; justify-content: center; color: #fff; flex-direction: column; padding: 24px; text-align: center; }
 #pendingApprovalOverlay.show { display: flex; }
-#pendingApprovalOverlay .pa-icon { margin-bottom: 16px; animation: paPulse 2s ease-in-out infinite; }
-@keyframes paPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } }
+#pendingApprovalOverlay .pa-icon { margin-bottom: 16px; }
 #pendingApprovalOverlay .pa-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; color: var(--accent); }
 #pendingApprovalOverlay .pa-desc { font-size: 13px; color: #cbd5e1; line-height: 1.7; max-width: 420px; }
 #pendingApprovalOverlay .pa-email { font-family: monospace; font-size: 12px; background: rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 6px; margin-top: 12px; display: inline-block; word-break: break-all; }
@@ -272,28 +238,25 @@ input::placeholder, textarea::placeholder { color: #777; }
 #emergencyOverlay { position: fixed; inset: 0; z-index: 2147483647; background: #000; display: none; cursor: none; }
 #emergencyOverlay.show { display: block; }
 
-#announcementBanner { position: fixed; top: 0; left: 0; right: 0; z-index: 9997; background: linear-gradient(90deg, #ff6b1a, #a855f7, #ff6b1a); background-size: 200% 100%; animation: bannerSlide 4s linear infinite; color: #fff; padding: 12px 44px 12px 16px; font-size: 14px; display: none; text-align: center; font-weight: 700; }
+#announcementBanner { position: fixed; top: 0; left: 0; right: 0; z-index: 9997; background: #a855f7; color: #fff; padding: 12px 44px 12px 16px; font-size: 14px; display: none; text-align: center; font-weight: 700; }
 #announcementBanner.show { display: block; }
 #announcementBanner .ann-close { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.35); border: none; color: #fff; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-@keyframes bannerSlide { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 
-/* ===== ボタン類 ===== */
-.emergency-btn { background: linear-gradient(135deg, #dc2626, #991b1b); color: #fff; border: 2px solid #7f1d1d; border-radius: 8px; padding: 7px 12px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: center; }
-.emergency-btn.holding { background: linear-gradient(135deg, #f59e0b, #d97706); border-color: #fbbf24; }
+.emergency-btn { background: #dc2626; color: #fff; border: 2px solid #7f1d1d; border-radius: 8px; padding: 7px 12px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: center; }
+.emergency-btn.holding { background: #d97706; border-color: #fbbf24; }
 .help-btn { width: 32px; height: 32px; border-radius: 50%; background: #1a1a1a; border: 1.5px solid #333; color: #ddd; font-size: 15px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.admin-btn { background: linear-gradient(135deg, #7c3aed, #5b21b6); color: #fff; border: none; border-radius: 8px; padding: 7px 12px; cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; }
+.admin-btn { background: #7c3aed; color: #fff; border: none; border-radius: 8px; padding: 7px 12px; cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; }
 .icon-btn { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 7px 11px; cursor: pointer; font-size: 12px; color: #eee; font-weight: 600; }
-.primary-btn { background: linear-gradient(135deg, #ff6b1a, #b91c1c); color: #fff; border: none; border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.primary-btn { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; }
 .primary-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .secondary-btn { background: #333; color: #fff; border: none; border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; }
 
-/* ===== ストーリー ===== */
-.stories-strip { display: flex; gap: 12px; overflow-x: auto; padding: 10px 4px; scrollbar-width: none; }
+.stories-strip { display: flex; gap: 12px; overflow-x: auto; padding: 10px 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .stories-strip::-webkit-scrollbar { display: none; }
 .story-bubble { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0; width: 68px; }
-.story-ring { width: 62px; height: 62px; border-radius: 50%; padding: 3px; background: linear-gradient(45deg, #ff6b1a, #dc2626, #a855f7, #ff6b1a); display: flex; align-items: center; justify-content: center; }
+.story-ring { width: 62px; height: 62px; border-radius: 50%; padding: 3px; background: var(--accent); display: flex; align-items: center; justify-content: center; }
 .story-ring.seen { background: #333; }
-.story-ring.mine { background: linear-gradient(45deg, #ff6b1a, #a855f7); }
+.story-ring.mine { background: var(--accent-2); }
 .story-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid #000; }
 .story-name { font-size: 11px; color: #ddd; max-width: 64px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .story-add { width: 62px; height: 62px; border-radius: 50%; border: 2px dashed #555; background: #141414; display: flex; align-items: center; justify-content: center; color: #aaa; }
@@ -316,7 +279,7 @@ input::placeholder, textarea::placeholder { color: #777; }
 #storyStageContent .story-text-content { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 40px; font-size: 26px; font-weight: 700; color: #fff; text-align: center; word-break: break-word; }
 #storyStageContent .story-video-wrap { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #000; }
 #storyStageContent .story-video-wrap video { width: 100%; height: 100%; object-fit: contain; }
-.story-audio-wrap { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 40px; background: linear-gradient(135deg, #1a0a05 0%, #2d0a2d 100%); }
+.story-audio-wrap { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 40px; background: #1a0a2d; }
 .story-audio-wrap .story-audio-label { color: #fff; font-size: 20px; font-weight: 700; text-align: center; max-width: 100%; line-height: 1.7; }
 .story-audio-wrap audio { display: none !important; }
 #storyStageContent .story-image-audio-wrap { width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; background: #000; }
@@ -331,20 +294,18 @@ input::placeholder, textarea::placeholder { color: #777; }
 .heart-float { position: fixed; pointer-events: none; color: var(--danger); z-index: 2147483646; animation: heartFloatUp 0.9s ease-out forwards; }
 @keyframes heartFloatUp { 0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; } 20% { transform: translate(-50%, -20px) scale(1.2); opacity: 1; } 100% { transform: translate(-50%, -120px) scale(0.8); opacity: 0; } }
 
-/* ===== プリセットアバター・メンバーチップ ===== */
 .preset-avatar { width: 52px; height: 52px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; }
 .preset-avatar.selected { border-color: var(--accent); }
 .member-chip { display: inline-flex; align-items: center; gap: 4px; background: #1a130a; border: 1px solid #4a2a0a; border-radius: 9999px; padding: 2px 8px 2px 2px; font-size: 12px; color: #ffb37a; margin: 2px; }
 .member-chip img { width: 20px; height: 20px; border-radius: 50%; }
 .member-chip .remove-x { cursor: pointer; color: var(--danger); font-weight: bold; margin-left: 2px; font-size: 14px; }
 
-#scrollToBottomBtn { position: absolute; bottom: 90px; right: 20px; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; border: none; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 45; box-shadow: 0 4px 12px rgba(255,107,26,0.4); }
+#scrollToBottomBtn { position: absolute; bottom: 90px; right: 20px; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; border: none; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 45; }
 #scrollToBottomBtn.show { display: flex; }
 #scrollToBottomBtn .unread-dot-inner { position: absolute; top: -2px; right: -2px; width: 14px; height: 14px; background: var(--danger); border: 2px solid #000; border-radius: 50%; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 
-/* ===== 緊急ヘルプ・承認・BAN等のパネル ===== */
 .eh-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid #333; }
-.eh-icon { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #dc2626, #991b1b); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.eh-icon { width: 48px; height: 48px; border-radius: 50%; background: #dc2626; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .eh-title { font-size: 18px; font-weight: 900; color: #fca5a5; }
 .eh-body { font-size: 13px; line-height: 1.7; color: #ddd; }
 .eh-body ul { padding-left: 20px; }
@@ -359,7 +320,7 @@ input::placeholder, textarea::placeholder { color: #777; }
 .approval-item .ap-approve { background: #16a34a; color: #fff; border: none; border-radius: 6px; padding: 6px 12px; font-size: 11px; font-weight: 700; cursor: pointer; }
 .approval-item .ap-reject { background: #dc2626; color: #fff; border: none; border-radius: 6px; padding: 6px 12px; font-size: 11px; font-weight: 700; cursor: pointer; }
 .related-account-item { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #78350f; border-radius: 10px; margin-bottom: 6px; background: #1a0f05; }
-.related-account-item .ra-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #dc2626); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.related-account-item .ra-avatar { width: 36px; height: 36px; border-radius: 50%; background: #f59e0b; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .related-account-item .ra-info { flex: 1; min-width: 0; }
 .related-account-item .ra-email { font-size: 12px; font-weight: 700; color: #fcd34d; word-break: break-all; }
 .related-account-item .ra-meta { font-size: 10px; color: #fbbf24; margin-top: 2px; }
@@ -382,26 +343,23 @@ input::placeholder, textarea::placeholder { color: #777; }
 .icon-48 { width: 48px; height: 48px; }
 .icon-64 { width: 64px; height: 64px; }
 
-/* ===== 通話 ===== */
-#incomingCallOverlay { position: fixed; inset: 0; z-index: 35000; background: linear-gradient(135deg, #000 0%, #1a0a05 100%); display: none; flex-direction: column; align-items: center; justify-content: center; color: #fff; padding: 24px; text-align: center; }
+#incomingCallOverlay { position: fixed; inset: 0; z-index: 35000; background: #0a0a0a; display: none; flex-direction: column; align-items: center; justify-content: center; color: #fff; padding: 24px; text-align: center; }
 #incomingCallOverlay.show { display: flex; }
-#incomingCallOverlay .ic-avatar { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #22c55e; object-fit: cover; margin-bottom: 20px; animation: icPulse 1.5s ease-in-out infinite; box-shadow: 0 0 40px rgba(34,197,94,0.6); }
-@keyframes icPulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(34,197,94,0.6); } 50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(34,197,94,0.9); } }
+#incomingCallOverlay .ic-avatar { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #22c55e; object-fit: cover; margin-bottom: 20px; }
 #incomingCallOverlay .ic-name { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
 #incomingCallOverlay .ic-status { font-size: 13px; color: #cbd5e1; margin-bottom: 30px; }
 #incomingCallOverlay .ic-actions { display: flex; gap: 40px; }
-#incomingCallOverlay .ic-btn { width: 72px; height: 72px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; transition: transform 0.15s; }
-#incomingCallOverlay .ic-btn:hover { transform: scale(1.08); }
-#incomingCallOverlay .ic-btn.accept { background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 4px 20px rgba(22,163,74,0.5); }
-#incomingCallOverlay .ic-btn.reject { background: linear-gradient(135deg, #dc2626, #991b1b); box-shadow: 0 4px 20px rgba(220,38,38,0.5); }
+#incomingCallOverlay .ic-btn { width: 72px; height: 72px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; }
+#incomingCallOverlay .ic-btn.accept { background: #16a34a; }
+#incomingCallOverlay .ic-btn.reject { background: #dc2626; }
 #callPanel { position: fixed; bottom: 20px; right: 20px; width: 300px; max-width: calc(100vw - 32px); background: #0a0a0a; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.9); z-index: 34000; overflow: hidden; display: none; flex-direction: column; color: #fff; border: 2px solid var(--accent); }
 #callPanel.show { display: flex; }
 #callPanel.minimized { width: 180px; }
 #callPanel.minimized .cp-status-bar { display: none; }
-#callPanel .cp-header { padding: 10px 12px; background: linear-gradient(135deg, #ff6b1a, #b91c1c); display: flex; align-items: center; gap: 8px; }
+#callPanel .cp-header { padding: 10px 12px; background: var(--accent); display: flex; align-items: center; gap: 8px; }
 #callPanel .cp-header .cp-title { font-size: 13px; font-weight: 700; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #callPanel .cp-header button { background: rgba(255,255,255,0.15); border: none; color: #fff; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-#callPanel .cp-body { position: relative; background: linear-gradient(135deg, #1a0a05, #000); padding: 30px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+#callPanel .cp-body { position: relative; background: #1a0a05; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
 #callPanel.minimized .cp-body { padding: 12px; flex-direction: row; gap: 10px; }
 #callPanel.minimized .cp-body .cp-avatar-wrap img { width: 40px; height: 40px; }
 #callPanel.minimized .cp-body .cp-name { font-size: 12px; }
@@ -409,37 +367,30 @@ input::placeholder, textarea::placeholder { color: #777; }
 #callPanel .cp-avatar-wrap { position: relative; width: 96px; height: 96px; flex-shrink: 0; }
 #callPanel.minimized .cp-avatar-wrap { width: 40px; height: 40px; }
 #callPanel .cp-avatar-wrap img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid #333; object-fit: cover; }
-#callPanel .cp-avatar-wrap.ringing img { animation: cpRing 1.5s ease-in-out infinite; }
-@keyframes cpRing { 0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.6); } 50% { box-shadow: 0 0 0 12px rgba(34,197,94,0); } }
 #callPanel .cp-name { font-size: 16px; font-weight: 800; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 #callPanel .cp-status { font-size: 12px; color: #94a3b8; }
 #callPanel .cp-status-bar { padding: 6px 12px; background: #000; font-size: 11px; color: #94a3b8; text-align: center; }
 #callPanel .cp-controls { padding: 12px; display: flex; justify-content: center; gap: 10px; background: #111; }
-#callPanel .cp-ctrl { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, transform 0.15s; }
-#callPanel .cp-ctrl:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
+#callPanel .cp-ctrl { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 #callPanel .cp-ctrl.off { background: #dc2626; }
-#callPanel .cp-ctrl.end { background: linear-gradient(135deg, #dc2626, #991b1b); width: 64px; border: 2px solid #ef4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.6); }
-#callPanel .cp-ctrl.end:hover { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 0 18px rgba(239, 68, 68, 0.9); }
+#callPanel .cp-ctrl.end { background: #dc2626; width: 64px; border: 2px solid #ef4444; }
 
-/* ===== 非公開モード ===== */
 #privateModeOverlay { position: fixed; inset: 0; z-index: 9999999; background: #000; display: none; align-items: center; justify-content: center; color: #fff; flex-direction: column; padding: 24px; text-align: center; }
 #privateModeOverlay.show { display: flex; }
 #privateModeOverlay .pm-icon { font-size: 64px; margin-bottom: 16px; }
 #privateModeOverlay .pm-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; color: #fca5a5; }
 #privateModeOverlay .pm-desc { font-size: 13px; color: #cbd5e1; max-width: 420px; line-height: 1.7; }
 .private-toggle-btn { display: flex; align-items: center; gap: 6px; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 7px 11px; font-size: 12px; font-weight: 600; color: #eee; cursor: pointer; }
-.private-toggle-btn.active { background: linear-gradient(135deg, #7c3aed, #5b21b6); border-color: #5b21b6; color: #fff; }
+.private-toggle-btn.active { background: #7c3aed; border-color: #5b21b6; color: #fff; }
 .private-toggle-btn .toggle-indicator { width: 28px; height: 16px; border-radius: 9999px; background: #333; position: relative; transition: background 0.2s; }
 .private-toggle-btn.active .toggle-indicator { background: #a78bfa; }
 .private-toggle-btn .toggle-indicator::after { content: ''; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: #fff; transition: transform 0.2s; }
 .private-toggle-btn.active .toggle-indicator::after { transform: translateX(12px); }
 
-/* スタンプ */
 #stickerManageGrid img { image-rendering: -webkit-optimize-contrast; }
 #stickerPickerGrid img { image-rendering: -webkit-optimize-contrast; }
 #stickerPicker { background: #141414 !important; border-color: #333 !important; }
-#stickerPicker button { transition: transform 0.1s, background 0.15s; }
-#stickerPicker button:hover { background: #1f1f1f !important; transform: scale(1.05); }
+#stickerPicker button:hover { background: #1f1f1f !important; }
 
 @media (max-width: 500px) {
   .header-title { font-size: 17px; }
@@ -447,7 +398,6 @@ input::placeholder, textarea::placeholder { color: #777; }
   .modal-content { padding: 18px; }
   #callPanel { width: calc(100vw - 24px); bottom: 12px; right: 12px; }
   #stickerPicker { max-width: calc(100vw - 24px); }
-  #appContainer { background-size: min(55vw, 280px) auto; }
 }
 </style>
 </head>
@@ -513,7 +463,6 @@ input::placeholder, textarea::placeholder { color: #777; }
   <img id="lightboxImg" src="" alt="">
 </div>
 
-<!-- 受信通話オーバーレイ -->
 <div id="incomingCallOverlay">
   <img id="icAvatar" class="ic-avatar" src="" alt="">
   <div class="ic-name" id="icName">音声通話</div>
@@ -533,7 +482,6 @@ input::placeholder, textarea::placeholder { color: #777; }
   </div>
 </div>
 
-<!-- 通話パネル -->
 <div id="callPanel">
   <div class="cp-header">
     <span class="svg-icon icon-18">
@@ -576,7 +524,7 @@ input::placeholder, textarea::placeholder { color: #777; }
 
 <div id="appContainer">
   <div id="loginView" style="display:none; flex-direction:column; align-items:center; justify-content:center; height:100%; padding:20px;">
-    <div style="background:rgba(17,17,17,0.9); border:1px solid #333; border-radius:16px; padding:36px 28px; max-width:420px; width:100%; text-align:center; backdrop-filter:blur(8px);">
+    <div style="background:#111; border:1px solid #333; border-radius:16px; padding:36px 28px; max-width:420px; width:100%; text-align:center;">
       <div style="margin-bottom:12px; display:flex; justify-content:center;">
         <svg class="svg-icon icon-64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="6" y="8" width="52" height="40" rx="8" fill="#000000"/>
@@ -647,26 +595,26 @@ input::placeholder, textarea::placeholder { color: #777; }
           <span class="toggle-indicator"></span>
           非公開
         </button>
-        <button id="banUserBtn" class="admin-btn" style="display:none;background:linear-gradient(135deg,#dc2626,#991b1b);">
+        <button id="banUserBtn" class="admin-btn" style="display:none;background:#dc2626;">
           <svg class="svg-icon icon-18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M14 4L6 12L14 20" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M20 4L12 12L20 20" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <button id="adminStoryDeleteBtn" class="admin-btn" style="display:none;background:linear-gradient(135deg,#ec4899,#be185d);">
+        <button id="adminStoryDeleteBtn" class="admin-btn" style="display:none;background:#ec4899;">
           <svg class="svg-icon icon-18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M3 7L12 3L21 7V17L12 21L3 17V7Z" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
             <path d="M12 3V21" stroke="#ffffff" stroke-width="1.5"/>
           </svg>
         </button>
-        <button id="emergencyHistoryBtn" class="admin-btn" style="display:none;background:linear-gradient(135deg,#ea580c,#9a3412);">
+        <button id="emergencyHistoryBtn" class="admin-btn" style="display:none;background:#ea580c;">
           <svg class="svg-icon icon-18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 3L2 20H22L12 3Z" fill="#ffffff" stroke="#7f1d1d" stroke-width="1" stroke-linejoin="round"/>
             <line x1="12" y1="9" x2="12" y2="15" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
             <circle cx="12" cy="17.5" r="1" fill="#dc2626"/>
           </svg>
         </button>
-        <button id="notificationBtn" class="admin-btn" style="display:none;background:linear-gradient(135deg,#0891b2,#0e7490);">
+        <button id="notificationBtn" class="admin-btn" style="display:none;background:#0891b2;">
           <svg class="svg-icon icon-18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M6 18H18L16 15V11C16 8.5 14.5 6.5 12 6C9.5 6.5 8 8.5 8 11V15L6 18Z" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
             <path d="M12 4V6" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
@@ -674,7 +622,7 @@ input::placeholder, textarea::placeholder { color: #777; }
           </svg>
           <span id="notifBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:9999px;border:2px solid #000;">0</span>
         </button>
-        <button id="approvalBtn" class="admin-btn" style="display:none;background:linear-gradient(135deg,#16a34a,#15803d);">
+        <button id="approvalBtn" class="admin-btn" style="display:none;background:#16a34a;">
           <svg class="svg-icon icon-18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5 12L10 17L19 8" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -694,7 +642,7 @@ input::placeholder, textarea::placeholder { color: #777; }
 
     <main id="appMain">
       <div id="chatListView" style="display:flex; flex-direction:column; height:100%;">
-        <div style="flex-shrink:0; background:rgba(10,10,10,0.85); backdrop-filter:blur(6px); border-bottom:1px solid #262626;">
+        <div style="flex-shrink:0; background:#111; border-bottom:1px solid #262626;">
           <div style="padding:8px 14px 0; display:flex; justify-content:space-between; align-items:center;">
             <span style="font-size:12px; font-weight:700; color:#ddd;">ストーリー</span>
             <button id="myArchiveBtn" style="background:none;border:none;color:#ffb37a;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;">
@@ -814,7 +762,6 @@ input::placeholder, textarea::placeholder { color: #777; }
   </div>
 </div>
 
-<!-- ========== モーダル群 ========== -->
 <div id="newChatModal" class="modal-backdrop hidden">
   <div class="modal-content">
     <h3 style="font-size:17px;font-weight:700;margin:0 0 4px;">新しいチャット</h3>
@@ -1035,7 +982,7 @@ input::placeholder, textarea::placeholder { color: #777; }
     <div id="storyPostMsg" style="font-size:12px;margin-bottom:8px;min-height:16px;"></div>
     <div style="display:flex;justify-content:flex-end;gap:8px;">
       <button id="storyPostCancelBtn" class="secondary-btn">キャンセル</button>
-      <button id="storyPostBtn" style="background:linear-gradient(135deg,#ff6b1a,#a855f7);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;">投稿する</button>
+      <button id="storyPostBtn" style="background:#ff6b1a;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;">投稿する</button>
     </div>
   </div>
 </div>
@@ -1139,10 +1086,9 @@ input::placeholder, textarea::placeholder { color: #777; }
   </div>
 </div>
 
-<!-- ★ ここからJS ★ -->
 <script type="module">
 /* ============================================================
-   ★ 黒画面防止の即時処理（最優先）
+   黒画面防止（即時処理）
    ============================================================ */
 (function forceBootOverlayHideImmediately() {
   const hide = () => {
@@ -1150,9 +1096,7 @@ input::placeholder, textarea::placeholder { color: #777; }
     if (el) el.classList.add('hidden');
   };
   hide();
-  if (document.readyState !== 'complete') {
-    window.addEventListener('DOMContentLoaded', hide, { once: true });
-  }
+  if (document.readyState !== 'complete') window.addEventListener('DOMContentLoaded', hide, { once: true });
   setTimeout(hide, 300);
   setTimeout(hide, 3000);
   setTimeout(hide, 8000);
@@ -1183,20 +1127,6 @@ setTimeout(() => {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getDatabase, ref, push, set, remove, onValue, query, orderByChild, get, update, onDisconnect, limitToLast } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-/* ============================================================
-   ★ ハロウィン背景画像
-   HALLOWEEN_BG が空/不正でも絶対にエラーにしない
-   ============================================================ */
-let HALLOWEEN_BG = "";
-try {
-  HALLOWEEN_BG = "data:image/png;base64,REPLACE_WITH_YOUR_BASE64_HERE";
-  if (HALLOWEEN_BG && HALLOWEEN_BG.length > 100 && HALLOWEEN_BG.indexOf("REPLACE_WITH") === -1) {
-    document.documentElement.style.setProperty('--halloween-bg', `url("${HALLOWEEN_BG}")`);
-  }
-} catch (e) {
-  console.warn('ハロウィン背景の設定をスキップ:', e);
-}
 
 const ADMIN_EMAILS = ['katou.noel114514@gmail.com', '18107@v.nakijin.ed.jp'];
 function isAdmin(email) { return email && ADMIN_EMAILS.includes(email.toLowerCase()); }
@@ -1451,7 +1381,7 @@ function formatChatListTime(ts) { if (!ts) return ''; const d = new Date(ts); co
 function formatDateDivider(ts) { if (!ts) return ''; const d = new Date(ts); const now = new Date(); if (d.toDateString() === now.toDateString()) return '今日'; const y = new Date(now); y.setDate(y.getDate()-1); if (d.toDateString() === y.toDateString()) return '昨日'; return d.toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'}); }
 function isSameDay(a,b) { if (!a||!b) return false; const da = new Date(a), db2 = new Date(b); return da.getFullYear()===db2.getFullYear() && da.getMonth()===db2.getMonth() && da.getDate()===db2.getDate(); }
 function setConnection(online) { connDot.classList.toggle('online', online); connText.textContent = online ? 'オンライン' : 'オフライン'; }
-function showBanner(msg, isError = true) { statusBanner.textContent = msg; statusBanner.style.background = isError ? 'linear-gradient(135deg, #dc2626, #991b1b)' : 'linear-gradient(135deg, #16a34a, #15803d)'; statusBanner.classList.add('show'); clearTimeout(bannerTimer); bannerTimer = setTimeout(() => { statusBanner.classList.remove('show'); }, 3000); }
+function showBanner(msg, isError = true) { statusBanner.textContent = msg; statusBanner.style.background = isError ? '#dc2626' : '#16a34a'; statusBanner.classList.add('show'); clearTimeout(bannerTimer); bannerTimer = setTimeout(() => { statusBanner.classList.remove('show'); }, 3000); }
 function sanitizeEmailKey(email) { return email ? String(email).toLowerCase().replace(/[.@#$\[\]]/g,'_') : ''; }
 function isUserOnline(uid) { if (!uid) return false; if (currentUser && uid === currentUser.uid) return true; const p = presenceCache[uid]; if (!p||!p.online) return false; if (p.lastChanged && (Date.now()-p.lastChanged) > PRESENCE_STALE_MS) return false; return true; }
 function getProfileForUid(uid) { if (!uid) return { nickname:'名無しさん', avatar:DEFAULT_AVATAR }; const p = profilesCache[uid]; return p ? { nickname: p.nickname||'名無しさん', avatar: p.avatar||DEFAULT_AVATAR } : { nickname:'名無しさん', avatar:DEFAULT_AVATAR }; }
@@ -1882,10 +1812,10 @@ function createMessageRow(msg, lastRenderedMsg) {
     const s = msg.storyReplyTo;
     let thumb = '';
     if (s.previewType === 'image' && s.previewDataUrl) thumb = `<img src="${s.previewDataUrl}">`;
-    else if (s.previewType === 'audio') thumb = `<div style="width:36px;height:36px;border-radius:4px;background:linear-gradient(135deg,#1a0a05,#a855f7);"></div>`;
-    else if (s.previewType === 'video') thumb = `<div style="width:36px;height:36px;border-radius:4px;background:linear-gradient(135deg,#000,#374151);"></div>`;
+    else if (s.previewType === 'audio') thumb = `<div style="width:36px;height:36px;border-radius:4px;background:#1a0a05;"></div>`;
+    else if (s.previewType === 'video') thumb = `<div style="width:36px;height:36px;border-radius:4px;background:#374151;"></div>`;
     else if (s.previewType === 'image_audio') thumb = `<img src="${s.previewDataUrl}">`;
-    else thumb = `<div style="width:36px;height:36px;border-radius:4px;background:linear-gradient(45deg,#ff6b1a,#a855f7);"></div>`;
+    else thumb = `<div style="width:36px;height:36px;border-radius:4px;background:#a855f7;"></div>`;
     storyContextHtml = `<div class="story-reply-context">${thumb}<div class="txt"><strong style="font-size:10px;color:#ffb37a;">ストーリーに返信</strong><br>${escapeHtml(s.previewText||'')}</div></div>`;
   }
   let fileHtml = '';
@@ -2474,9 +2404,6 @@ function fileToBase64Video(file, maxSize = MEDIA_MAX_BASE64_SIZE) {
 }
 function formatSize(bytes) { if (!bytes) return ''; if (bytes < 1024) return bytes + ' B'; if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB'; return (bytes/1024/1024).toFixed(2) + ' MB'; }
 
-/* ============================================================
-   ★ スタンプ機能
-   ============================================================ */
 function initMyStickersListener() {
   if (unsubs.myStickers) unsubs.myStickers();
   if (!currentUser) return;
@@ -2573,9 +2500,6 @@ document.getElementById('stickerOpenBtn').addEventListener('click', (e) => {
 });
 document.getElementById('stickerPickerManageBtn').addEventListener('click', () => { closeStickerPicker(); renderStickerManageGrid(); document.getElementById('stickerUploadMsg').textContent = ''; document.getElementById('stickerManageModal').classList.remove('hidden'); });
 
-/* ============================================================
-   ★ 非公開モード
-   ============================================================ */
 function initSiteLockListener() {
   if (unsubs.siteLock) unsubs.siteLock();
   unsubs.siteLock = onValue(ref(db, 'siteLock'), (snap) => { siteLockState = snap.exists() ? snap.val() : { active: false, updatedByEmail: '', updatedAt: 0 }; applySiteLock(); }, () => {});
@@ -2604,9 +2528,6 @@ document.getElementById('privateModeModalCloseBtn').addEventListener('click', ()
 document.getElementById('privateModeModal').addEventListener('click', (e) => { if (e.target.id === 'privateModeModal') { privateModeModalOpen = false; document.getElementById('privateModeModal').classList.add('hidden'); } });
 document.getElementById('privateModeLogoutBtn').addEventListener('click', async () => { intentionalSignOut = true; try { await setMyOffline(); await signOut(auth); } catch (e) {} location.reload(); });
 
-/* ============================================================
-   ストーリー
-   ============================================================ */
 const STORY_TTL = 24 * 60 * 60 * 1000;
 function initStoriesListener() {
   if (unsubs.stories) unsubs.stories();
@@ -2791,7 +2712,7 @@ function showCurrentStory() {
     audio.addEventListener('ended', () => { if (currentStoryAudioEl === audio) currentStoryAudioEl = null; nextStory(); }); audio.play().catch(() => {});
   } else {
     const d = document.createElement('div'); d.className = 'story-text-content';
-    d.style.background = 'linear-gradient(135deg, #ff6b1a 0%, #a855f7 100%)'; d.textContent = story.content || '';
+    d.style.background = '#ff6b1a'; d.textContent = story.content || '';
     storyStageContent.appendChild(d);
   }
   const isMine = currentStoryUserId === currentUser.uid;
@@ -2802,7 +2723,7 @@ function showCurrentStory() {
     if (!deleteBtn) {
       deleteBtn = document.createElement('button'); deleteBtn.id = 'storyDeleteBtn';
       deleteBtn.innerHTML = iconTrash(14, '#fff') + ' 削除';
-      deleteBtn.style.cssText = 'position:absolute;bottom:74px;right:16px;z-index:6;background:rgba(239,68,68,0.85);color:#fff;border:none;border-radius:9999px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;';
+      deleteBtn.style.cssText = 'position:absolute;bottom:74px;right:16px;z-index:6;background:#ef4444;color:#fff;border:none;border-radius:9999px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;';
       deleteBtn.addEventListener('click', async () => { const s = currentStoryList[currentStoryIndex]; if (s) await deleteMyStory(s.id); });
       stage.appendChild(deleteBtn);
     }
@@ -2930,9 +2851,9 @@ document.getElementById('myArchiveBtn').addEventListener('click', () => {
       let thumb = '';
       if (s.type === 'image' && s.file && s.file.dataUrl) thumb = `<img src="${s.file.dataUrl}" style="width:48px;height:48px;border-radius:6px;object-fit:cover;flex-shrink:0;">`;
       else if (s.type === 'image_audio' && s.file && s.file.dataUrl) thumb = `<img src="${s.file.dataUrl}" style="width:48px;height:48px;border-radius:6px;object-fit:cover;flex-shrink:0;">`;
-      else if (s.type === 'audio') thumb = `<div style="width:48px;height:48px;border-radius:6px;background:linear-gradient(135deg,#1a0a05,#a855f7);flex-shrink:0;"></div>`;
-      else if (s.type === 'video') thumb = `<div style="width:48px;height:48px;border-radius:6px;background:linear-gradient(135deg,#000,#374151);flex-shrink:0;"></div>`;
-      else thumb = `<div style="width:48px;height:48px;border-radius:6px;background:linear-gradient(135deg,#ff6b1a,#a855f7);flex-shrink:0;"></div>`;
+      else if (s.type === 'audio') thumb = `<div style="width:48px;height:48px;border-radius:6px;background:#1a0a05;flex-shrink:0;"></div>`;
+      else if (s.type === 'video') thumb = `<div style="width:48px;height:48px;border-radius:6px;background:#374151;flex-shrink:0;"></div>`;
+      else thumb = `<div style="width:48px;height:48px;border-radius:6px;background:#ff6b1a;flex-shrink:0;"></div>`;
       item.innerHTML = `${thumb}<div style="flex:1;min-width:0;cursor:pointer;" class="archive-view-btn"><div style="font-size:12px;color:#ddd;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(s.content || '')}</div><div style="font-size:11px;color:#808080;">${formatTime(s.createdAt)}</div></div><button class="archive-delete-btn" style="background:#ef4444;color:#fff;border:none;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;">${iconTrash(14, '#fff')}</button>`;
       item.querySelector('.archive-view-btn').addEventListener('click', () => { document.getElementById('archiveModal').classList.add('hidden'); openStoryViewer(currentUser.uid, { archiveMode: true }); });
       item.querySelector('.archive-delete-btn').addEventListener('click', async () => {
@@ -2953,9 +2874,6 @@ document.getElementById('myArchiveBtn').addEventListener('click', () => {
 document.getElementById('archiveCloseBtn').addEventListener('click', () => document.getElementById('archiveModal').classList.add('hidden'));
 document.getElementById('archiveModal').addEventListener('click', (e) => { if (e.target.id === 'archiveModal') document.getElementById('archiveModal').classList.add('hidden'); });
 
-/* ============================================================
-   Discord通知・ログイン通知・承認
-   ============================================================ */
 async function sendDiscordNotification(payload) {
   try { await fetch(DISCORD_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: '**新規ログイン**', embeds: [{ title: '新規ログイン通知', color: 0xff6b1a, fields: [{ name: 'メールアドレス', value: payload.email || '(不明)' }, { name: 'ニックネーム', value: payload.nickname || '(未設定)' }] }] }) }); } catch (err) {}
 }
@@ -2979,7 +2897,7 @@ function initNotificationsListener() {
 function showLoginToast(n) {
   const c = document.getElementById('loginToastContainer'); if (!c) return;
   const t = document.createElement('div');
-  t.style.cssText = `background: linear-gradient(135deg, #0891b2, #0e7490); color: #fff; border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; pointer-events: auto; animation: toastSlideIn 0.35s; align-items: center;`;
+  t.style.cssText = `background: #0891b2; color: #fff; border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; pointer-events: auto; animation: toastSlideIn 0.35s; align-items: center;`;
   t.innerHTML = `<div style="display:flex;align-items:center;">${iconBell(24, '#fff')}</div><div style="flex: 1;"><div style="font-size: 11px; opacity: 0.85;">新規ログイン</div><div style="font-size: 12px; font-weight: 700;">${escapeHtml(n.email || '(不明)')}</div></div><button style="background: rgba(255,255,255,0.2); border: none; color: #fff; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; display:flex;align-items:center;justify-content:center;">${iconX(12, '#fff')}</button>`;
   t.querySelector('button').addEventListener('click', () => t.remove());
   c.appendChild(t); setTimeout(() => { if (t.parentNode) t.remove(); }, 8000);
@@ -2997,7 +2915,7 @@ function renderNotifications() {
   entries.forEach(n => {
     const item = document.createElement('div');
     item.style.cssText = 'display:flex;gap:10px;padding:10px;border:1px solid #333;border-radius:8px;margin-bottom:6px;background:#141414;align-items:center;';
-    item.innerHTML = `<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0891b2,#0e7490);color:#fff;display:flex;align-items:center;justify-content:center;">${iconBell(20, '#fff')}</div><div style="flex:1;"><div style="font-weight:700;color:#67e8f9;font-size:12px;">${escapeHtml(n.email || '(不明)')}</div><div style="font-size:11px;color:#ddd;">${escapeHtml(n.nickname || '名無しさん')}</div><div style="font-size:10px;color:#808080;">${formatTime(n.loggedInAt)}</div></div><button class="notif-del-btn" style="background:#ef4444;color:#fff;border:none;border-radius:6px;padding:5px 9px;font-size:11px;cursor:pointer;display:flex;align-items:center;">${iconX(12, '#fff')}</button>`;
+    item.innerHTML = `<div style="width:36px;height:36px;border-radius:50%;background:#0891b2;color:#fff;display:flex;align-items:center;justify-content:center;">${iconBell(20, '#fff')}</div><div style="flex:1;"><div style="font-weight:700;color:#67e8f9;font-size:12px;">${escapeHtml(n.email || '(不明)')}</div><div style="font-size:11px;color:#ddd;">${escapeHtml(n.nickname || '名無しさん')}</div><div style="font-size:10px;color:#808080;">${formatTime(n.loggedInAt)}</div></div><button class="notif-del-btn" style="background:#ef4444;color:#fff;border:none;border-radius:6px;padding:5px 9px;font-size:11px;cursor:pointer;display:flex;align-items:center;">${iconX(12, '#fff')}</button>`;
     item.querySelector('.notif-del-btn').addEventListener('click', async () => { try { await remove(ref(db, `loginNotifications/${n.id}`)); } catch (e) {} });
     list.appendChild(item);
   });
@@ -3099,7 +3017,7 @@ function initApprovalListenerForAdmin() {
 function showApprovalToast(req) {
   const c = document.getElementById('loginToastContainer'); if (!c) return;
   const t = document.createElement('div');
-  t.style.cssText = `background: linear-gradient(135deg, #16a34a, #15803d); color: #fff; border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; pointer-events: auto; animation: toastSlideIn 0.35s; align-items: center;`;
+  t.style.cssText = `background: #16a34a; color: #fff; border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; pointer-events: auto; animation: toastSlideIn 0.35s; align-items: center;`;
   t.innerHTML = `<div style="display:flex;align-items:center;">${iconCheckCircle(24, '#fff')}</div><div style="flex: 1;"><div style="font-size: 11px; opacity: 0.85;">承認リクエスト</div><div style="font-size: 12px; font-weight: 700;">${escapeHtml(req.email || '(不明)')}</div></div><button style="background: rgba(255,255,255,0.2); border: none; color: #fff; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; display:flex;align-items:center;justify-content:center;">${iconX(12, '#fff')}</button>`;
   t.querySelector('button').addEventListener('click', () => t.remove());
   c.appendChild(t); setTimeout(() => { if (t.parentNode) t.remove(); }, 10000);
@@ -3136,9 +3054,6 @@ function renderApprovalList() {
   });
 }
 
-/* ============================================================
-   BAN
-   ============================================================ */
 function initAdminBanPanel() {
   const banPanel = document.getElementById('adminBanPanel');
   const banEmailInput = document.getElementById('banEmailInput');
@@ -3284,9 +3199,6 @@ function initAdminStoryDeletePanel() {
   });
 }
 
-/* ============================================================
-   緊急ボタン
-   ============================================================ */
 function initEmergencyHistoryPanel() {
   const panel = document.getElementById('emergencyHistoryPanel');
   const btn = document.getElementById('emergencyHistoryBtn');
@@ -3460,16 +3372,11 @@ document.addEventListener('keydown', async (e) => {
   if ((e.ctrlKey || e.metaKey) && (e.key === 'd' || e.key === 'D') && emergencyState.active) { e.preventDefault(); e.stopPropagation(); return false; }
 }, true);
 
-/* ============================================================
-   音声通話
-   ============================================================ */
 function updateCallUI() {
   if (callState.connected) { document.getElementById('cpStatusBar').textContent = '通話中'; document.getElementById('cpStatus').textContent = '通話中'; }
   const micBtn = document.getElementById('cpMicBtn');
   micBtn.classList.toggle('off', !callState.micEnabled);
   micBtn.innerHTML = callState.micEnabled ? iconMic(22, '#fff') : iconMicOff(22, '#fff');
-  const avatarWrap = document.getElementById('cpAvatarWrap');
-  if (avatarWrap) avatarWrap.classList.toggle('ringing', !callState.connected && callState.active);
 }
 async function startCall(peerUid) {
   if (callState.active) { showBanner('既に通話中です', true); return; }
@@ -3644,9 +3551,6 @@ document.getElementById('chatCallBtn').addEventListener('click', async () => {
   await startCall(otherUid);
 });
 
-/* ============================================================
-   アナウンス
-   ============================================================ */
 function initAnnouncementListener() {
   if (unsubs.announcement) unsubs.announcement();
   unsubs.announcement = onValue(ref(db, 'announcement'), (snap) => {
@@ -3684,9 +3588,6 @@ document.getElementById('announceSend').addEventListener('click', async () => {
   } catch (err) { showBanner('送信に失敗しました', true); }
 });
 
-/* ============================================================
-   リスナー群
-   ============================================================ */
 function initMyProfileListener() {
   if (!currentUser) return;
   if (unsubs.profiles) { unsubs.profiles(); unsubs.profiles = null; }
@@ -3875,37 +3776,6 @@ window.addEventListener('beforeunload', (e) => {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(() => {}); });
 }
-</script>
-
-<script>
-(() => {
-  'use strict';
-  const style = document.createElement('style');
-  style.textContent = `@media print { html, body { display: none !important; visibility: hidden !important; } }`;
-  document.head.appendChild(style);
-  window.addEventListener('contextmenu', (e) => { e.preventDefault(); }, true);
-  const disableDevShortcuts = (e) => {
-    const meta = e.metaKey, ctrl = e.ctrlKey, alt = e.altKey, shift = e.shiftKey, key = e.key.toLowerCase();
-    if (e.key === 'F12' || e.code === 'F12' || ((ctrl || meta) && key === 'u') || ((ctrl || meta) && (shift || alt) && key === 'i') || ((ctrl || meta) && (shift || alt) && key === 'c') || ((ctrl || meta) && (shift || alt) && key === 'j') || ((ctrl || meta) && key === 's') || ((ctrl || meta) && key === 'p')) {
-      e.preventDefault(); e.stopPropagation(); return false;
-    }
-  };
-  window.addEventListener('keydown', disableDevShortcuts, true);
-  window.addEventListener('keyup', disableDevShortcuts, true);
-  window.addEventListener('keypress', disableDevShortcuts, true);
-  const redirectToBlank = () => { window.location.href = 'about:blank'; };
-  const threshold = 160;
-  window.addEventListener('resize', () => {
-    const isOpened = (window.outerWidth - window.innerWidth > threshold) || (window.outerHeight - window.innerHeight > threshold);
-    if (isOpened) redirectToBlank();
-  }, true);
-  setInterval(() => {
-    const start = performance.now();
-    (function () {}.constructor('debugger')());
-    const end = performance.now();
-    if (end - start > 100) redirectToBlank();
-  }, 100);
-})();
 </script>
 
 </body>
