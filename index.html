@@ -118,8 +118,6 @@ input::placeholder,textarea::placeholder{color:#777}
 .chat-header-menu-btn{background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:7px 11px;cursor:pointer;font-size:14px;color:#eee;font-weight:700;display:flex;align-items:center;justify-content:center}
 .chat-call-btn{background:#16a34a;border:none;border-radius:8px;padding:7px 11px;cursor:pointer;color:#fff;font-weight:700;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .chat-call-btn:disabled{opacity:.5;cursor:not-allowed}
-.chat-video-btn{background:#2563eb;border:none;border-radius:8px;padding:7px 11px;cursor:pointer;color:#fff;font-weight:700;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.chat-video-btn:disabled{opacity:.5;cursor:not-allowed}
 .chat-header-menu-popup{position:fixed;background:#141414;border:1px solid #333;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.8);min-width:200px;z-index:30000;overflow:hidden}
 .chat-header-menu-popup button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:11px 14px;font-size:13px;background:none;border:none;cursor:pointer;color:#eee}
 .chat-header-menu-popup button:hover{background:#1f1f1f}
@@ -315,24 +313,7 @@ input::placeholder,textarea::placeholder{color:#777}
 #stickerPickerGrid img{image-rendering:-webkit-optimize-contrast}
 #stickerPicker{background:#141414!important;border-color:#333!important}
 #stickerPicker button:hover{background:#1f1f1f!important}
-.call-join-btn{display:inline-flex;align-items:center;gap:6px;background:#16a34a;color:#fff;border:none;border-radius:9999px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px}
-.call-join-btn:hover{background:#15803d}
-.call-join-btn:disabled{opacity:.5;cursor:not-allowed}
-#videoCallOverlay{position:fixed;inset:0;z-index:36000;background:#000;display:none;flex-direction:column;color:#fff}
-#videoCallOverlay.show{display:flex}
-#videoCallHeader{flex-shrink:0;padding:12px 16px;background:rgba(0,0,0,.7);display:flex;align-items:center;gap:10px;border-bottom:1px solid #333}
-#videoCallHeader .vc-title{font-size:14px;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#videoCallHeader .vc-count{font-size:12px;color:#94a3b8}
-#videoCallHeader button{background:rgba(255,255,255,.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center}
-#videoCallGrid{flex:1;display:grid;gap:8px;padding:8px;overflow-y:auto;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));align-content:start}
-.video-tile{position:relative;background:#111;border-radius:12px;overflow:hidden;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;border:2px solid #222}
-.video-tile video{width:100%;height:100%;object-fit:cover;display:block}
-.video-tile .vt-name{position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:2px 8px;border-radius:9999px;max-width:calc(100% - 12px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#videoCallFooter{flex-shrink:0;padding:12px;background:rgba(0,0,0,.8);display:flex;justify-content:center;gap:14px;border-top:1px solid #333;padding-bottom:max(12px,env(safe-area-inset-bottom))}
-#videoCallFooter .vc-ctrl{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
-#videoCallFooter .vc-ctrl.off{background:#dc2626}
-#videoCallFooter .vc-ctrl.end{background:#dc2626;width:70px;border:2px solid #ef4444}
-@media(max-width:500px){.header-title{font-size:17px}.msg-body{max-width:82%}.modal-content{padding:18px}#callPanel{width:calc(100vw - 24px);bottom:12px;right:12px}#stickerPicker{max-width:calc(100vw - 24px)}#videoCallGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.header-title{font-size:17px}.msg-body{max-width:82%}.modal-content{padding:18px}#callPanel{width:calc(100vw - 24px);bottom:12px;right:12px}#stickerPicker{max-width:calc(100vw - 24px)}}
 </style>
 </head>
 <body>
@@ -397,44 +378,9 @@ input::placeholder,textarea::placeholder{color:#777}
   <img id="lightboxImg" src="" alt="">
 </div>
 
-<div id="videoCallOverlay">
-  <div id="videoCallHeader">
-    <span class="vc-title" id="vcTitle">ビデオ通話</span>
-    <span class="vc-count" id="vcCount">0人</span>
-    <button id="vcMinimizeBtn" title="閉じる">
-      <svg class="svg-icon icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line x1="3" y1="8" x2="13" y2="8" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-    </button>
-  </div>
-  <div id="videoCallGrid"></div>
-  <div id="videoCallFooter">
-    <button class="vc-ctrl" id="vcMicBtn" title="マイク">
-      <svg class="svg-icon icon-24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="9" y="3" width="6" height="11" rx="3" stroke="#fff" stroke-width="2"/>
-        <path d="M5 11C5 14.866 8.134 18 12 18C15.866 18 19 14.866 19 11" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-        <line x1="12" y1="18" x2="12" y2="22" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-    </button>
-    <button class="vc-ctrl" id="vcCamBtn" title="カメラ">
-      <svg class="svg-icon icon-24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="2" y="6" width="14" height="12" rx="2" stroke="#fff" stroke-width="2"/>
-        <path d="M16 10L22 7V17L16 14" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
-      </svg>
-    </button>
-    <button class="vc-ctrl end" id="vcEndBtn" title="終了">
-      <svg class="svg-icon icon-28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="2" y="2" width="24" height="24" rx="6" stroke="#fff" stroke-width="2" fill="none"/>
-        <path d="M9 11C9 11 10.5 8.5 14 8.5C17.5 8.5 19 11 19 11L17 14L15 13V10.8C14.4 10.7 13.7 10.65 14 10.65C14.3 10.65 13.6 10.7 13 10.8V13L11 14L9 11Z" fill="#fff"/>
-        <line x1="7" y1="21" x2="21" y2="7" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
-      </svg>
-    </button>
-  </div>
-</div>
-
 <div id="incomingCallOverlay">
   <img id="icAvatar" class="ic-avatar" src="" alt="">
-  <div class="ic-name" id="icName">通話</div>
+  <div class="ic-name" id="icName">音声通話</div>
   <div class="ic-status" id="icStatus">着信中...</div>
   <div class="ic-actions">
     <button class="ic-btn reject" id="icRejectBtn" title="拒否">
@@ -655,12 +601,6 @@ input::placeholder,textarea::placeholder{color:#777}
           <button id="chatCallBtn" class="chat-call-btn" title="音声通話">
             <svg class="svg-icon icon-20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 8C6 8 8 5 12 5C16 5 18 8 18 8L16 11L14 10V8.5C13.4 8.4 12.7 8.3 12 8.3C11.3 8.3 10.6 8.4 10 8.5V10L8 11L6 8Z" fill="#ffffff"/>
-            </svg>
-          </button>
-          <button id="chatVideoBtn" class="chat-video-btn" title="ビデオ通話">
-            <svg class="svg-icon icon-20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2" y="6" width="14" height="12" rx="2" stroke="#ffffff" stroke-width="2"/>
-              <path d="M16 10L22 7V17L16 14" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
             </svg>
           </button>
           <button id="chatHeaderMenuBtn" class="chat-header-menu-btn">
@@ -1060,9 +1000,10 @@ input::placeholder,textarea::placeholder{color:#777}
     </div>
   </div>
 </div>
+
 <script type="module">
 /* ============================================================
-   黒画面防止（即時）
+   黒画面防止
    ============================================================ */
 (function forceBootOverlayHideImmediately(){const hide=()=>{const el=document.getElementById('bootOverlay');if(el)el.classList.add('hidden')};hide();if(document.readyState!=='complete')window.addEventListener('DOMContentLoaded',hide,{once:true});setTimeout(hide,300);setTimeout(hide,3000);setTimeout(hide,8000);setTimeout(hide,15000);window.addEventListener('error',hide,true);window.addEventListener('unhandledrejection',hide)})();
 (function forceHideBlackOverlays(){['emergencyOverlay','privateModeOverlay','banOverlay','pendingApprovalOverlay'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('show')})})();
@@ -1118,13 +1059,13 @@ let currentUser=null;
 let myProfile={nickname:'',avatar:DEFAULT_AVATAR};
 let currentChatId=null;
 let chatsCache={},messagesCache=[],profilesCache={},bansCache={},emailBansCache={},deviceLinksCache={},readsCache={},typingCache={},presenceCache={},reactionsCache={};
+/* ★ 追加：チャットIDごとのメッセージキャッシュ */
 const messageCacheByChatId={};
 const messageUnsubsByChatId={};
 let unsubs={chats:null,messages:null,profiles:null,bans:null,emailBans:null,deviceLinks:null,reads:null,typing:null,stories:null,myArchive:null,presence:null,emergency:null,announcement:null,notifications:null,reactions:null,approvals:null,myApproval:null,storyLikes:null,storyViews:null,emergencyHistory:null,siteLock:null,myStickers:null};
 let chatLatestListeners={};
 let profileUnsubs={};
 let presenceUnsubs={};
-let incomingCallUnsubs={};
 
 const UNREAD_STORAGE_KEY='sikunai_unread_v5';
 const LASTREAD_STORAGE_KEY='sikunai_lastread_v5';
@@ -1173,15 +1114,6 @@ let myStickers={};
 let stickerPickerOpen=false;
 let currentStickerPickerEl=null;
 let notificationPermissionGranted=false;
-let approvedSessionStarted=false;
-
-/* ★ グループ通話の状態 */
-let groupCallState={
-  active:false,chatId:null,sessionId:null,type:'audio',
-  pcs:{},streams:{},localStream:null,
-  micEnabled:true,camEnabled:false,
-  joinedUids:{},unsubs:[],gridUnsub:null
-};
 
 const notificationAudioCtx={ctx:null,unlocked:false,init(){if(!this.ctx){try{this.ctx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){this.ctx=null}}if(this.ctx&&this.ctx.state==='suspended'){this.ctx.resume().then(()=>{this.unlocked=true}).catch(()=>{})}else if(this.ctx&&this.ctx.state==='running'){this.unlocked=true}return this.ctx},play(){const ctx=this.init();if(!ctx)return;const playOnce=(delay)=>{try{const now=ctx.currentTime+delay;const osc=ctx.createOscillator();const gain=ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(880,now);osc.frequency.exponentialRampToValueAtTime(1320,now+0.08);osc.frequency.exponentialRampToValueAtTime(880,now+0.16);gain.gain.setValueAtTime(0,now);gain.gain.linearRampToValueAtTime(0.35,now+0.02);gain.gain.exponentialRampToValueAtTime(0.001,now+0.5);osc.connect(gain);gain.connect(ctx.destination);osc.start(now);osc.stop(now+0.55)}catch(e){}};playOnce(0);playOnce(0.6)}};
 
@@ -1193,6 +1125,7 @@ function refreshFavicon(){if(emergencyState.active){setFavicon(FAVICON_BLACK);re
 function updateTitleUnread(){if(emergencyState.active){document.title='無';return}document.title='69CT 🎃'}
 function fireNotification(chatId,senderName,messageText){notificationAudioCtx.play();refreshFavicon();const title=senderName?senderName:'新着メッセージ';const body=messageText||'新しいメッセージが届きました';showDesktopNotification(title,body)}
 
+let callState={active:false,role:null,chatId:null,peerUid:null,sessionId:null,pc:null,localStream:null,remoteStream:null,micEnabled:true,pendingCandidates:[],callDocRef:null,unsub:null,isMinimized:false,connected:false,remoteDescSet:false};
 const ICE_SERVERS={iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:stun2.l.google.com:19302'}]};
 
 const bootOverlay=document.getElementById('bootOverlay');
@@ -1222,6 +1155,7 @@ const scrollUnreadCount=document.getElementById('scrollUnreadCount');
 const privateModeOverlay=document.getElementById('privateModeOverlay');
 let bannerTimer=null,announcementTimer=null;
 
+/* ★ renderChatList のスロットリング */
 let renderChatListScheduled=false;
 function scheduleRenderChatList(){if(renderChatListScheduled)return;renderChatListScheduled=true;requestAnimationFrame(()=>{renderChatListScheduled=false;renderChatList()})}
 
@@ -1244,8 +1178,6 @@ function iconHeart(size=24,color='#fff',filled=false){return '<svg class="svg-ic
 function iconEye(size=14,color='#fff'){return '<svg class="svg-icon" width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 12C4 7 8 5 12 5C16 5 20 7 22 12C20 17 16 19 12 19C8 19 4 17 2 12Z" stroke="'+color+'" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="'+color+'" stroke-width="2"/></svg>'}
 function iconMic(size=22,color='#fff'){return '<svg class="svg-icon" width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="3" width="6" height="11" rx="3" stroke="'+color+'" stroke-width="2"/><path d="M5 11C5 14.866 8.134 18 12 18C15.866 18 19 14.866 19 11" stroke="'+color+'" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="18" x2="12" y2="22" stroke="'+color+'" stroke-width="2" stroke-linecap="round"/></svg>'}
 function iconMicOff(size=22,color='#fff'){return '<svg class="svg-icon" width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="3" width="6" height="11" rx="3" stroke="'+color+'" stroke-width="2"/><line x1="4" y1="4" x2="20" y2="20" stroke="'+color+'" stroke-width="2.2" stroke-linecap="round"/></svg>'}
-function iconCam(size=24,color='#fff'){return '<svg class="svg-icon" width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="6" width="14" height="12" rx="2" stroke="'+color+'" stroke-width="2"/><path d="M16 10L22 7V17L16 14" stroke="'+color+'" stroke-width="2" stroke-linejoin="round"/></svg>'}
-function iconCamOff(size=24,color='#fff'){return '<svg class="svg-icon" width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="6" width="14" height="12" rx="2" stroke="'+color+'" stroke-width="2"/><path d="M16 10L22 7V17L16 14" stroke="'+color+'" stroke-width="2" stroke-linejoin="round"/><line x1="3" y1="3" x2="21" y2="21" stroke="'+color+'" stroke-width="2.2" stroke-linecap="round"/></svg>'}
 
 function escapeHtml(str){if(!str)return'';return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
 function formatContent(str){if(!str)return'';return escapeHtml(str).replace(/(https?:\/\/[^\s<]+)/g,(url)=>{const safe=url.replace(/&amp;/g,'&');return '<a href="'+safe+'" target="_blank" rel="noopener noreferrer">'+url+'</a>'})}
@@ -1261,10 +1193,8 @@ function getProfileForUid(uid){if(!uid)return{nickname:'名無しさん',avatar:
 function getChatPartnerUids(){const s=new Set();if(!currentUser)return s;Object.values(chatsCache||{}).forEach(c=>{if(!c||!c.members)return;Object.keys(c.members).forEach(uid=>{if(uid!==currentUser.uid)s.add(uid)})});return s}
 function updateMyProfileUI(){myAvatar.src=myProfile.avatar||DEFAULT_AVATAR;myName.textContent=myProfile.nickname||'名無しさん'}
 
-/* ============================================================
-   プレゼンス
-   ============================================================ */
 function updatePresenceDots(){document.querySelectorAll('[data-presence-uid]').forEach(el=>{el.classList.toggle('online',isUserOnline(el.dataset.presenceUid))});document.querySelectorAll('[data-presence-msg-uid]').forEach(el=>{el.classList.toggle('online',isUserOnline(el.dataset.presenceMsgUid))});updateChatHeaderPresence()}
+
 async function setupMyPresence(){if(!currentUser)return;myPresenceRef=ref(db,'presence/'+currentUser.uid);try{await set(myPresenceRef,{online:true,lastChanged:Date.now()});onDisconnect(myPresenceRef).set({online:false,lastChanged:Date.now()})}catch(e){}if(heartbeatTimer)clearInterval(heartbeatTimer);heartbeatTimer=setInterval(()=>{if(currentUser&&myPresenceRef)update(myPresenceRef,{online:true,lastChanged:Date.now()}).catch(()=>{})},HEARTBEAT_INTERVAL)}
 async function setMyOffline(){if(!currentUser)return;if(heartbeatTimer){clearInterval(heartbeatTimer);heartbeatTimer=null}try{await set(ref(db,'presence/'+currentUser.uid),{online:false,lastChanged:Date.now()})}catch(e){}}
 
@@ -1337,9 +1267,7 @@ function updateChatHeader(){
     meta.innerHTML='<span class="online-label '+(online?'':'offline')+'"><span class="online-dot '+(online?'online':'')+'"></span>'+(online?'オンライン':'オフライン')+'</span>';
   }
   const callBtn=document.getElementById('chatCallBtn');
-  if(callBtn){callBtn.disabled=callState.active||groupCallState.active;callBtn.title='音声通話'}
-  const videoBtn=document.getElementById('chatVideoBtn');
-  if(videoBtn){videoBtn.disabled=callState.active||groupCallState.active;videoBtn.title='ビデオ通話'}
+  if(callBtn){callBtn.disabled=isGroup||callState.active;callBtn.title=isGroup?'グループでは通話できません':'音声通話'}
 }
 
 function updateChatHeaderPresence(){if(!currentChatId||!chatsCache[currentChatId])return;const chat=chatsCache[currentChatId];const meta=document.getElementById('currentChatMeta');if(!meta)return;if(chat.type==='group'){const others=Object.keys(chat.members||{}).filter(uid=>uid!==currentUser.uid);const onlineCount=others.filter(uid=>isUserOnline(uid)).length;const label=meta.querySelector('.online-label');if(label){label.className='online-label '+(onlineCount===0?'offline':'');const dot=label.querySelector('.online-dot');if(dot)dot.classList.toggle('online',onlineCount>0);const textNodes=Array.from(label.childNodes).filter(n=>n.nodeType===Node.TEXT_NODE);if(textNodes[0])textNodes[0].nodeValue=' '+onlineCount+'人オンライン'}}else{const otherUid=Object.keys(chat.members||{}).find(uid=>uid!==currentUser.uid);const online=isUserOnline(otherUid);const label=meta.querySelector('.online-label');if(label){label.className='online-label '+(online?'':'offline');const dot=label.querySelector('.online-dot');if(dot)dot.classList.toggle('online',online);const textNodes=Array.from(label.childNodes).filter(n=>n.nodeType===Node.TEXT_NODE);if(textNodes[0])textNodes[0].nodeValue=' '+(online?'オンライン':'オフライン')}}}
@@ -1363,6 +1291,8 @@ function openChat(chatId){
   document.getElementById('currentChatName').textContent=displayName;
   updateChatHeader();
   chatListView.style.display='none';chatView.style.display='flex';
+
+  /* ★ キャッシュがあれば即描画、なければスピナー */
   const cached=messageCacheByChatId[chatId];
   if(cached&&cached.length>0){
     messagesCache=cached.slice().sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
@@ -1372,9 +1302,12 @@ function openChat(chatId){
   }
   typingIndicatorSlot.innerHTML='';typingCache={};reactionsCache={};
   isNearBottom=true;updateScrollButton();
+
+  /* リスナーはチャットごとに1度だけ張る */
   if(!messageUnsubsByChatId[chatId]){
     loadMessages(chatId);
   }else{
+    /* 既に張ってあるなら、キャッシュがなければ「読み込み中」を外す */
     if(!cached||cached.length===0){
       requestAnimationFrame(()=>{
         if(messagesContainer.querySelector('.loading-spinner')){
@@ -1450,23 +1383,7 @@ async function toggleReaction(msgKey,emoji){if(!currentUser||!currentChatId)retu
 function createMessageRow(msg,lastRenderedMsg){
   const key=msg.key;
   const clientMsgId=msg.clientMsgId||key;
-  if(msg.system){
-    const sys=document.createElement('div');sys.className='system-message';sys.dataset.msgKey=key;
-    sys.innerHTML='<span>'+escapeHtml(msg.content||'')+'</span>';
-    if(msg.callSystem&&msg.callSessionId){
-      const btn=document.createElement('button');
-      btn.className='call-join-btn';
-      btn.textContent='参加する';
-      btn.addEventListener('click',()=>{
-        if(!currentChatId)return;
-        if(groupCallState.active){showBanner('既に通話中です',true);return}
-        joinGroupCall(currentChatId,msg.callSessionId,'audio');
-      });
-      sys.appendChild(document.createElement('br'));
-      sys.appendChild(btn);
-    }
-    return {row:sys,msg};
-  }
+  if(msg.system){const sys=document.createElement('div');sys.className='system-message';sys.dataset.msgKey=key;sys.innerHTML='<span>'+escapeHtml(msg.content||'')+'</span>';return{row:sys,msg}}
   const isMine=currentUser&&msg.authorUid===currentUser.uid;
   const profile=getProfileForUid(msg.authorUid);
   const senderOnline=isUserOnline(msg.authorUid);
@@ -1758,9 +1675,6 @@ function fileToBase64Audio(file,maxSize=MEDIA_MAX_BASE64_SIZE){return new Promis
 function fileToBase64Video(file,maxSize=MEDIA_MAX_BASE64_SIZE){return new Promise((resolve,reject)=>{if(!file){resolve(null);return}const reader=new FileReader();reader.onerror=()=>reject(new Error('ファイル読み込み失敗'));reader.onload=(e)=>{const dataUrl=e.target.result;if(dataUrl.length>maxSize){reject(new Error('動画ファイルが大きすぎます'));return}resolve({dataUrl,name:file.name,type:'video/mp4',size:dataUrl.length})};reader.readAsDataURL(file)})}
 function formatSize(bytes){if(!bytes)return'';if(bytes<1024)return bytes+' B';if(bytes<1024*1024)return(bytes/1024).toFixed(1)+' KB';return(bytes/1024/1024).toFixed(2)+' MB'}
 
-/* ============================================================
-   ★ スタンプ
-   ============================================================ */
 function initMyStickersListener(){if(unsubs.myStickers)unsubs.myStickers();if(!currentUser)return;unsubs.myStickers=onValue(ref(db,'stickers/'+currentUser.uid),(snap)=>{myStickers=snap.exists()?snap.val():{};renderStickerManageGrid();renderStickerPickerGrid()},()=>{})}
 function renderStickerManageGrid(){const grid=document.getElementById('stickerManageGrid');if(!grid)return;const entries=Object.entries(myStickers||{}).sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));if(entries.length===0){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;color:#808080;font-size:12px;padding:24px;">まだスタンプがありません</div>';return}grid.innerHTML='';entries.forEach(([sid,s])=>{const cell=document.createElement('div');cell.style.cssText='position:relative;border:1px solid #333;border-radius:8px;overflow:hidden;background:#0a0a0a;aspect-ratio:1;';cell.innerHTML='<img src="'+s.dataUrl+'" style="width:100%;height:100%;object-fit:contain;display:block;" alt=""><button class="sticker-del-btn" title="削除" style="position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;background:rgba(239,68,68,0.9);color:#fff;border:none;cursor:pointer;font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center;">×</button>';cell.querySelector('.sticker-del-btn').addEventListener('click',async(ev)=>{ev.stopPropagation();if(!confirm('このスタンプを削除しますか？'))return;try{await remove(ref(db,'stickers/'+currentUser.uid+'/'+sid));showBanner('削除しました',false)}catch(e){showBanner('削除に失敗しました',true)}});grid.appendChild(cell)})}
 function renderStickerPickerGrid(){const grid=document.getElementById('stickerPickerGrid');const empty=document.getElementById('stickerPickerEmpty');if(!grid)return;const entries=Object.entries(myStickers||{}).sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));grid.innerHTML='';if(entries.length===0){if(empty)empty.style.display='block';return}if(empty)empty.style.display='none';entries.forEach(([sid,s])=>{const b=document.createElement('button');b.type='button';b.style.cssText='border:1px solid #333;border-radius:8px;background:#0a0a0a;padding:2px;cursor:pointer;aspect-ratio:1;overflow:hidden;';b.innerHTML='<img src="'+s.dataUrl+'" style="width:100%;height:100%;object-fit:contain;display:block;" alt="">';b.addEventListener('click',()=>{sendSticker(s);closeStickerPicker()});grid.appendChild(b)})}
@@ -1774,9 +1688,6 @@ document.getElementById('stickerUploadInput').addEventListener('change',async(e)
 document.getElementById('stickerOpenBtn').addEventListener('click',(e)=>{e.stopPropagation();if(stickerPickerOpen){closeStickerPicker();return}closeAllMenus();closeReactionPicker();closeChatHeaderMenu();renderStickerPickerGrid();const p=document.getElementById('stickerPicker');const btn=e.currentTarget;p.style.display='block';stickerPickerOpen=true;const r=btn.getBoundingClientRect();const pr=p.getBoundingClientRect();let left=r.left-pr.width/2+r.width/2;let top=r.top-pr.height-8;if(left<8)left=8;if(left+pr.width>window.innerWidth-8)left=window.innerWidth-pr.width-8;if(top<8)top=r.bottom+8;p.style.left=left+'px';p.style.top=top+'px';setTimeout(()=>document.addEventListener('click',outsideStickerPickerHandler),0)});
 document.getElementById('stickerPickerManageBtn').addEventListener('click',()=>{closeStickerPicker();renderStickerManageGrid();document.getElementById('stickerUploadMsg').textContent='';document.getElementById('stickerManageModal').classList.remove('hidden')});
 
-/* ============================================================
-   ★ 非公開モード
-   ============================================================ */
 function initSiteLockListener(){if(unsubs.siteLock)unsubs.siteLock();unsubs.siteLock=onValue(ref(db,'siteLock'),(snap)=>{siteLockState=snap.exists()?snap.val():{active:false,updatedByEmail:'',updatedAt:0};applySiteLock()},()=>{})}
 function applySiteLock(){const admin=currentUser&&isAdmin(currentUser.email);const locked=!!siteLockState.active;const btn=document.getElementById('privateModeBtn');if(btn){btn.classList.toggle('active',locked);btn.title=locked?'非公開モード: 有効（クリックで設定）':'非公開モード: 無効（クリックで設定）'}const toggleBtn=document.getElementById('privateModeToggleBtn');const toggleText=document.getElementById('privateModeToggleText');const statusLabel=document.getElementById('privateModeStatusLabel');if(toggleBtn)toggleBtn.classList.toggle('active',locked);if(toggleText)toggleText.textContent=locked?'有効':'無効';if(statusLabel)statusLabel.textContent=locked?'現在: 有効':'現在: 無効';if(locked&&!admin){executePrivateModeBlock()}else{privateModeOverlay.classList.remove('show');if(admin||!locked){document.body.style.background=''}privateRedirectAttempted=false}}
 async function setSiteLock(active){if(!currentUser||!isAdmin(currentUser.email)){showBanner('権限がありません',true);return}try{await set(ref(db,'siteLock'),{active:!!active,updatedBy:currentUser.uid,updatedByEmail:currentUser.email||'',updatedAt:Date.now()});showBanner(active?'非公開モードを有効にしました':'非公開モードを無効にしました',false)}catch(e){showBanner('設定に失敗しました',true)}}
@@ -1787,9 +1698,6 @@ document.getElementById('privateModeModalCloseBtn').addEventListener('click',()=
 document.getElementById('privateModeModal').addEventListener('click',(e)=>{if(e.target.id==='privateModeModal'){privateModeModalOpen=false;document.getElementById('privateModeModal').classList.add('hidden')}});
 document.getElementById('privateModeLogoutBtn').addEventListener('click',async()=>{intentionalSignOut=true;try{await setMyOffline();await signOut(auth)}catch(e){}location.reload()});
 
-/* ============================================================
-   ★ ストーリー
-   ============================================================ */
 const STORY_TTL=24*60*60*1000;
 function initStoriesListener(){if(unsubs.stories)unsubs.stories();unsubs.stories=onValue(ref(db,'stories'),(snap)=>{const now=Date.now();const raw=snap.exists()?snap.val():{};storiesCache={};Object.entries(raw).forEach(([uid,userStories])=>{if(!userStories)return;const valid={};Object.entries(userStories).forEach(([sid,s])=>{if(!s||!s.createdAt)return;if((now-s.createdAt)<STORY_TTL)valid[sid]=s;else remove(ref(db,'stories/'+uid+'/'+sid)).catch(()=>{})});if(Object.keys(valid).length>0)storiesCache[uid]=valid});renderStories()},()=>{})}
 function initMyArchiveListener(){if(unsubs.myArchive)unsubs.myArchive();if(!currentUser)return;unsubs.myArchive=onValue(ref(db,'storyArchive/'+currentUser.uid),(snap)=>{myArchivedStories=snap.exists()?snap.val():{}},()=>{})}
@@ -1896,9 +1804,6 @@ document.getElementById('myArchiveBtn').addEventListener('click',()=>{
 document.getElementById('archiveCloseBtn').addEventListener('click',()=>document.getElementById('archiveModal').classList.add('hidden'));
 document.getElementById('archiveModal').addEventListener('click',(e)=>{if(e.target.id==='archiveModal')document.getElementById('archiveModal').classList.add('hidden')});
 
-/* ============================================================
-   ★ Discord通知・ログイン通知・承認
-   ============================================================ */
 async function sendDiscordNotification(payload){try{await fetch(DISCORD_WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:'**新規ログイン**',embeds:[{title:'新規ログイン通知',color:0xff6b1a,fields:[{name:'メールアドレス',value:payload.email||'(不明)'},{name:'ニックネーム',value:payload.nickname||'(未設定)'}]}]})})}catch(err){}}
 async function notifyLogin(user,nickname){if(!user)return;const payload={uid:user.uid,email:user.email||'',nickname:nickname||user.displayName||'名無しさん',loggedInAt:Date.now()};try{const newRef=push(ref(db,'loginNotifications'));await set(newRef,payload)}catch(e){}sendDiscordNotification(payload)}
 function initNotificationsListener(){if(unsubs.notifications)unsubs.notifications();if(!currentUser||!isAdmin(currentUser.email))return;unsubs.notifications=onValue(ref(db,'loginNotifications'),(snap)=>{const prevIds=new Set(lastNotifIds);notificationsCache=snap.exists()?snap.val():{};const currentIds=new Set(Object.keys(notificationsCache));if(prevIds.size>0)currentIds.forEach(id=>{if(!prevIds.has(id)){showLoginToast(notificationsCache[id]);notificationAudioCtx.play()}});lastNotifIds=currentIds;renderNotifications();updateNotifBadge()},()=>{})}
@@ -1912,16 +1817,14 @@ function initMyApprovalListener(user){if(unsubs.myApproval)unsubs.myApproval();i
 function showPendingApproval(){pendingApprovalOverlay.classList.add('show');mainView.style.display='none';document.getElementById('pendingApprovalEmail').textContent=currentUser?.email||''}
 function hidePendingApproval(){pendingApprovalOverlay.classList.remove('show')}
 function showRejectedScreen(){pendingApprovalOverlay.classList.remove('show');banOverlay.classList.add('show');document.getElementById('banOverlayMsg').textContent='アクセスが拒否されました';document.getElementById('banOverlaySub').textContent='管理者によって承認が拒否されました。';document.body.style.background='#000';document.title='アクセスが拒否されました'}
-function startApprovedSession(){if(approvedSessionStarted)return;approvedSessionStarted=true;mainView.style.display='flex';pendingApprovalOverlay.classList.remove('show');bootOverlay.classList.add('hidden');try{sessionStorage.setItem('__hasUser','1')}catch(e){}if(!unsubs.chats)initChatsListener();if(!unsubs.stories)initStoriesListener();if(!unsubs.myArchive)initMyArchiveListener();if(!unsubs.announcement)initAnnouncementListener();if(!unsubs.bans)initBansListener();if(!unsubs.siteLock)initSiteLockListener();if(!unsubs.myStickers)initMyStickersListener();setupMyPresence();initCallIncomingListener();initGroupCallIncomingListener();refreshFavicon();updateTitleUnread();requestNotificationPermission();setTimeout(()=>{cleanupAllChats().catch(()=>{})},3000)}
+let approvedSessionStarted=false;
+function startApprovedSession(){if(approvedSessionStarted)return;approvedSessionStarted=true;mainView.style.display='flex';pendingApprovalOverlay.classList.remove('show');bootOverlay.classList.add('hidden');try{sessionStorage.setItem('__hasUser','1')}catch(e){}if(!unsubs.chats)initChatsListener();if(!unsubs.stories)initStoriesListener();if(!unsubs.myArchive)initMyArchiveListener();if(!unsubs.announcement)initAnnouncementListener();if(!unsubs.bans)initBansListener();if(!unsubs.siteLock)initSiteLockListener();if(!unsubs.myStickers)initMyStickersListener();setupMyPresence();initCallIncomingListener();refreshFavicon();updateTitleUnread();requestNotificationPermission();setTimeout(()=>{cleanupAllChats().catch(()=>{})},3000)}
 function initAdminApprovalPanel(){const btn=document.getElementById('approvalBtn');if(!btn)return;btn.addEventListener('click',()=>{renderApprovalList();document.getElementById('approvalPanel').classList.remove('hidden');lastSeenApprovalCount=Object.keys(approvalsCache).length;localStorage.setItem(APPROVAL_SEEN_KEY,String(lastSeenApprovalCount));updateApprovalBadge()});document.getElementById('approvalCloseBtn').addEventListener('click',()=>document.getElementById('approvalPanel').classList.add('hidden'));document.getElementById('approvalPanel').addEventListener('click',(e)=>{if(e.target.id==='approvalPanel')document.getElementById('approvalPanel').classList.add('hidden')});document.getElementById('approvalClearAllBtn').addEventListener('click',async()=>{if(!confirm('全ての承認リクエストを削除しますか？'))return;try{await remove(ref(db,'approvalRequests'));showBanner('承認リクエストを全削除しました',false)}catch(e){showBanner('削除に失敗しました',true)}})}
 function initApprovalListenerForAdmin(){if(unsubs.approvals)unsubs.approvals();if(!currentUser||!isAdmin(currentUser.email))return;unsubs.approvals=onValue(ref(db,'approvalRequests'),(snap)=>{const prevIds=new Set(lastApprovalIds);approvalsCache=snap.exists()?snap.val():{};const currentIds=new Set(Object.keys(approvalsCache));if(prevIds.size>0)currentIds.forEach(id=>{if(!prevIds.has(id)){const req=approvalsCache[id];if(req.status==='pending'){showApprovalToast(req);notificationAudioCtx.play()}}});lastApprovalIds=currentIds;renderApprovalList();updateApprovalBadge()},()=>{})}
 function showApprovalToast(req){const c=document.getElementById('loginToastContainer');if(!c)return;const t=document.createElement('div');t.style.cssText='background: #16a34a; color: #fff; border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; pointer-events: auto; animation: toastSlideIn 0.35s; align-items: center;';t.innerHTML='<div style="display:flex;align-items:center;">'+iconCheckCircle(24,'#fff')+'</div><div style="flex: 1;"><div style="font-size: 11px; opacity: 0.85;">承認リクエスト</div><div style="font-size: 12px; font-weight: 700;">'+escapeHtml(req.email||'(不明)')+'</div></div><button style="background: rgba(255,255,255,0.2); border: none; color: #fff; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; display:flex;align-items:center;justify-content:center;">'+iconX(12,'#fff')+'</button>';t.querySelector('button').addEventListener('click',()=>t.remove());c.appendChild(t);setTimeout(()=>{if(t.parentNode)t.remove()},10000)}
 function updateApprovalBadge(){const b=document.getElementById('approvalBadge');if(!b)return;const pendingCount=Object.values(approvalsCache||{}).filter(r=>r.status==='pending').length;if(pendingCount>0){b.style.display='block';b.textContent=pendingCount>99?'99+':pendingCount}else b.style.display='none'}
 function renderApprovalList(){const list=document.getElementById('approvalList');if(!list)return;const entries=Object.entries(approvalsCache||{}).map(([id,r])=>({id,...r})).sort((a,b)=>(b.requestedAt||0)-(a.requestedAt||0));if(entries.length===0){list.innerHTML='<div style="text-align:center;color:#808080;padding:32px;">承認リクエストはありません</div>';return}list.innerHTML='';entries.forEach(r=>{const item=document.createElement('div');item.className='approval-item';const statusLabel=r.status==='approved'?'<span style="color:#16a34a;font-weight:700;">承認済み</span>':r.status==='rejected'?'<span style="color:#dc2626;font-weight:700;">拒否</span>':'<span style="color:#d97706;font-weight:700;">承認待ち</span>';item.innerHTML='<img class="ap-avatar" src="'+DEFAULT_AVATAR+'"><div class="ap-info"><div class="ap-email">'+escapeHtml(r.email||'(不明)')+'</div><div class="ap-nickname">'+escapeHtml(r.nickname||'名無しさん')+'</div><div class="ap-time">'+formatTime(r.requestedAt)+' '+statusLabel+'</div></div><div class="ap-actions">'+(r.status==='pending'?'<button class="ap-approve" data-id="'+escapeHtml(r.id)+'">承認</button><button class="ap-reject" data-id="'+escapeHtml(r.id)+'">拒否</button>':'')+'</div>';const ap=item.querySelector('.ap-approve');const rj=item.querySelector('.ap-reject');if(ap)ap.addEventListener('click',async()=>{if(!confirm('「'+r.email+'」を承認しますか？'))return;try{await update(ref(db,'approvalRequests/'+r.id),{status:'approved',approvedAt:Date.now(),approvedBy:currentUser.uid,approvedByEmail:currentUser.email||''});if(r.uid){try{await set(ref(db,'approvedUsers/'+r.uid),Date.now())}catch(e){}}showBanner('承認しました',false)}catch(e){showBanner('承認に失敗しました',true)}});if(rj)rj.addEventListener('click',async()=>{if(!confirm('「'+r.email+'」を拒否しますか？'))return;try{await update(ref(db,'approvalRequests/'+r.id),{status:'rejected',rejectedAt:Date.now(),rejectedBy:currentUser.uid,rejectedByEmail:currentUser.email||''});showBanner('拒否しました',false)}catch(e){showBanner('拒否に失敗しました',true)}});list.appendChild(item)})}
 
-/* ============================================================
-   ★ BAN
-   ============================================================ */
 function initAdminBanPanel(){const banPanel=document.getElementById('adminBanPanel');const banEmailInput=document.getElementById('banEmailInput');const banSearchMsg=document.getElementById('banSearchMsg');const banExecuteBtn=document.getElementById('banExecuteBtn');const banSearchRelatedBtn=document.getElementById('banSearchRelatedBtn');document.getElementById('banUserBtn').addEventListener('click',()=>{banEmailInput.value='';banSearchMsg.textContent='';relatedAccountsResult=[];document.getElementById('relatedAccountsBox').style.display='none';renderBanList();banPanel.classList.remove('hidden')});document.getElementById('banCancelBtn').addEventListener('click',()=>banPanel.classList.add('hidden'));banPanel.addEventListener('click',(e)=>{if(e.target.id==='adminBanPanel')banPanel.classList.add('hidden')});document.getElementById('relatedSelectAll').addEventListener('change',(e)=>{document.querySelectorAll('#relatedAccountsList .ra-check').forEach(c=>{c.checked=e.target.checked})});document.getElementById('relatedAccountsList').addEventListener('change',()=>{const checks=document.querySelectorAll('#relatedAccountsList .ra-check');const selectAll=document.getElementById('relatedSelectAll');if(!selectAll)return;const checkedCount=Array.from(checks).filter(c=>c.checked).length;selectAll.checked=checkedCount===checks.length;selectAll.indeterminate=checkedCount>0&&checkedCount<checks.length});
 banSearchRelatedBtn.addEventListener('click',async()=>{
   const email=banEmailInput.value.trim().toLowerCase();banSearchMsg.textContent='';banSearchMsg.style.color='#dc2626';
@@ -1947,9 +1850,6 @@ function renderRelatedAccounts(){const box=document.getElementById('relatedAccou
 function renderBanList(){const c=document.getElementById('banListContainer');if(!c)return;const uidEntries=Object.entries(bansCache||{});const emailEntries=Object.entries(emailBansCache||{});if(uidEntries.length+emailEntries.length===0){c.innerHTML='<div style="color:#808080;font-size:11px;padding:8px;text-align:center;">BANされたユーザーはいません</div>';return}c.innerHTML='';uidEntries.forEach(([uid,b])=>{const item=document.createElement('div');item.style.cssText='display:flex;align-items:center;gap:8px;padding:8px;border:1px solid #7f1d1d;background:#1a0505;border-radius:8px;margin-bottom:6px;';item.innerHTML='<div style="flex:1;min-width:0;"><div style="font-weight:700;color:#fca5a5;font-size:12px;">'+escapeHtml(b.nickname||'名無し')+' <span style="background:#dc2626;color:#fff;font-size:9px;padding:1px 5px;border-radius:9999px;">UID</span></div><div style="font-size:10px;color:#808080;">'+escapeHtml(b.email||'')+'</div></div><button style="background:#16a34a;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;" data-unban-uid="'+escapeHtml(uid)+'">解除</button>';item.querySelector('[data-unban-uid]').addEventListener('click',async()=>{if(!confirm('このUID BANを解除しますか？'))return;try{await remove(ref(db,'bans/'+uid));showBanner('解除しました',false)}catch(err){showBanner('失敗',true)}});c.appendChild(item)});emailEntries.forEach(([emailKey,b])=>{const item=document.createElement('div');item.style.cssText='display:flex;align-items:center;gap:8px;padding:8px;border:1px solid #78350f;background:#1a0f05;border-radius:8px;margin-bottom:6px;';item.innerHTML='<div style="flex:1;min-width:0;"><div style="font-weight:700;color:#fcd34d;font-size:12px;">'+escapeHtml(b.email||'')+' <span style="background:#ea580c;color:#fff;font-size:9px;padding:1px 5px;border-radius:9999px;">メール</span></div></div><button style="background:#16a34a;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;" data-unban-email="'+escapeHtml(emailKey)+'">解除</button>';item.querySelector('[data-unban-email]').addEventListener('click',async()=>{if(!confirm('このメールBANを解除しますか？'))return;try{await remove(ref(db,'emailBans/'+emailKey));showBanner('解除しました',false)}catch(err){showBanner('失敗',true)}});c.appendChild(item)})}
 function initAdminStoryDeletePanel(){const panel=document.getElementById('adminStoryDeletePanel');const emailInput=document.getElementById('storyDeleteEmailInput');const searchMsg=document.getElementById('storyDeleteSearchMsg');const executeBtn=document.getElementById('storyDeleteExecuteBtn');document.getElementById('adminStoryDeleteBtn').addEventListener('click',()=>{emailInput.value='';searchMsg.textContent='';panel.classList.remove('hidden')});document.getElementById('storyDeleteCancelBtn').addEventListener('click',()=>panel.classList.add('hidden'));panel.addEventListener('click',(e)=>{if(e.target.id==='adminStoryDeletePanel')panel.classList.add('hidden')});executeBtn.addEventListener('click',async()=>{const email=emailInput.value.trim().toLowerCase();searchMsg.textContent='';searchMsg.style.color='#dc2626';if(!email){searchMsg.textContent='メールアドレスを入力してください。';return}if(!isAdmin(currentUser.email)){searchMsg.textContent='権限がありません。';return}searchMsg.style.color='#808080';searchMsg.textContent='検索中...';try{const snap=await get(ref(db,'chatProfiles'));let targetUid=null,targetProfile=null;if(snap.exists()){for(const[uid,p]of Object.entries(snap.val())){if(p.email&&p.email.toLowerCase()===email){targetUid=uid;targetProfile=p;break}}}if(!targetUid){searchMsg.style.color='#dc2626';searchMsg.textContent='ユーザーが見つかりません。';return}if(!confirm('「'+(targetProfile.nickname||email)+'」の全ストーリーを削除しますか？'))return;const storySnap=await get(ref(db,'stories/'+targetUid));if(storySnap.exists()){const updates={};Object.keys(storySnap.val()).forEach(sid=>{updates['stories/'+targetUid+'/'+sid]=null;updates['storyArchive/'+targetUid+'/'+sid]=null;updates['storyLikes/'+sid]=null;updates['storyViews/'+sid]=null});await update(ref(db),updates)}searchMsg.style.color='#16a34a';searchMsg.textContent='削除しました';showBanner('ストーリーを削除しました',false);emailInput.value=''}catch(err){searchMsg.style.color='#dc2626';searchMsg.textContent='削除に失敗しました。'}})}
 
-/* ============================================================
-   ★ 緊急ボタン
-   ============================================================ */
 function initEmergencyHistoryPanel(){const panel=document.getElementById('emergencyHistoryPanel');const btn=document.getElementById('emergencyHistoryBtn');if(!btn||!panel)return;btn.addEventListener('click',()=>{renderEmergencyHistoryList();panel.classList.remove('hidden')});document.getElementById('emergencyHistoryCloseBtn').addEventListener('click',()=>panel.classList.add('hidden'));panel.addEventListener('click',(e)=>{if(e.target.id==='emergencyHistoryPanel')panel.classList.add('hidden')});document.getElementById('emergencyHistoryClearAllBtn').addEventListener('click',async()=>{if(!confirm('全ての緊急履歴を削除しますか？'))return;try{await remove(ref(db,'emergencyHistory'));showBanner('緊急履歴を全削除しました',false)}catch(e){showBanner('削除に失敗しました',true)}})}
 function initEmergencyHistoryListener(){if(unsubs.emergencyHistory)unsubs.emergencyHistory();if(!currentUser||!isAdmin(currentUser.email))return;unsubs.emergencyHistory=onValue(ref(db,'emergencyHistory'),(snap)=>{emergencyHistoryCache=snap.exists()?snap.val():{};const panel=document.getElementById('emergencyHistoryPanel');if(panel&&!panel.classList.contains('hidden')){renderEmergencyHistoryList()}},()=>{})}
 function renderEmergencyHistoryList(){const list=document.getElementById('emergencyHistoryList');if(!list)return;const entries=Object.entries(emergencyHistoryCache||{}).map(([id,h])=>({id,...h})).sort((a,b)=>(b.triggeredAt||0)-(a.triggeredAt||0));if(entries.length===0){list.innerHTML='<div style="text-align:center;color:#808080;padding:32px;">緊急ボタンの発動履歴はありません</div>';return}list.innerHTML='';entries.forEach(h=>{const item=document.createElement('div');item.style.cssText='display:flex;gap:10px;padding:10px;border:1px solid #78350f;background:#1a0f05;border-radius:10px;margin-bottom:8px;align-items:center;';item.innerHTML='<img src="'+escapeHtml(h.avatar||DEFAULT_AVATAR)+'" style="width:40px;height:40px;border-radius:50%;border:2px solid #ea580c;flex-shrink:0;object-fit:cover;"><div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:#fdba74;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+escapeHtml(h.nickname||'名無しさん')+'</div><div style="font-size:11px;color:#fed7aa;word-break:break-all;">'+escapeHtml(h.email||'(不明)')+'</div><div style="font-size:10px;color:#fbbf24;margin-top:2px;">'+formatTime(h.triggeredAt)+'</div></div><button class="eh-del-btn" style="background:#ef4444;color:#fff;border:none;border-radius:6px;padding:5px 9px;font-size:11px;cursor:pointer;display:flex;align-items:center;" data-id="'+escapeHtml(h.id)+'">'+iconX(12,'#fff')+'</button>';item.querySelector('.eh-del-btn').addEventListener('click',async()=>{if(!confirm('この履歴を削除しますか？'))return;try{await remove(ref(db,'emergencyHistory/'+h.id));showBanner('履歴を削除しました',false)}catch(e){showBanner('削除に失敗しました',true)}});list.appendChild(item)})}
@@ -1984,13 +1884,10 @@ emergencyBtn.addEventListener('touchend',(e)=>{e.preventDefault();endEmergencyPr
 emergencyBtn.addEventListener('touchcancel',()=>{cancelEmergencyPress();emergencyHoldTriggered=false});
 document.addEventListener('keydown',async(e)=>{if((e.ctrlKey||e.metaKey)&&(e.key==='d'||e.key==='D')){if(!emergencyState.active)return;if(!currentUser||!isAdmin(currentUser.email))return;e.preventDefault();e.stopPropagation();if(!confirm('緊急モードを解除しますか？'))return;try{await update(ref(db,'emergency'),{active:false,clearedBy:currentUser.uid,clearedByEmail:currentUser.email||'',clearedAt:Date.now()})}catch(err){alert('解除に失敗しました')}return false}if((e.ctrlKey||e.metaKey)&&(e.key==='d'||e.key==='D')&&emergencyState.active){e.preventDefault();e.stopPropagation();return false}},true);
 
-/* ============================================================
-   ★ 1対1通話（calls1to1）
-   ============================================================ */
-let callState={active:false,role:null,chatId:null,peerUid:null,sessionId:null,pc:null,localStream:null,remoteStream:null,micEnabled:true,pendingCandidates:[],callDocRef:null,unsub:null,isMinimized:false,connected:false,remoteDescSet:false};
 function updateCallUI(){if(callState.connected){document.getElementById('cpStatusBar').textContent='通話中';document.getElementById('cpStatus').textContent='通話中'}const micBtn=document.getElementById('cpMicBtn');micBtn.classList.toggle('off',!callState.micEnabled);micBtn.innerHTML=callState.micEnabled?iconMic(22,'#fff'):iconMicOff(22,'#fff')}
-async function startCall(peerUid){if(callState.active){showBanner('既に通話中です',true);return}if(!currentUser||!currentChatId)return;callState.active=true;callState.role='caller';callState.chatId=currentChatId;callState.peerUid=peerUid;callState.connected=false;callState.isMinimized=false;callState.micEnabled=true;callState.remoteDescSet=false;callState.pendingCandidates=[];const sessionRef=push(ref(db,'calls1to1/'+currentUser.uid));callState.sessionId=sessionRef.key;callState.callDocRef=sessionRef;const peerProfile=getProfileForUid(peerUid);try{const localStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});callState.localStream=localStream}catch(e){console.warn('マイク取得失敗:',e);showBanner('マイクへのアクセスが拒否されました',true)}const pc=new RTCPeerConnection(ICE_SERVERS);callState.pc=pc;if(callState.localStream){callState.localStream.getTracks().forEach(track=>pc.addTrack(track,callState.localStream))}pc.onicecandidate=(e)=>{if(e.candidate&&callState.sessionId){const candRef=ref(db,'calls1to1/'+currentUser.uid+'/'+callState.sessionId+'/callerCandidates');push(candRef,e.candidate.toJSON())}};pc.ontrack=(e)=>{if(e.streams&&e.streams[0]){callState.remoteStream=e.streams[0];const audioEl=new Audio();audioEl.srcObject=e.streams[0];audioEl.play().catch(()=>{})}};pc.onconnectionstatechange=()=>{if(pc.connectionState==='connected'){callState.connected=true;updateCallUI()}else if(pc.connectionState==='failed'||pc.connectionState==='disconnected'){showBanner('通話接続が切断されました',true);endCall(false)}};const offerDesc=await pc.createOffer();await pc.setLocalDescription(offerDesc);const callData={fromUid:currentUser.uid,fromName:myProfile.nickname,fromAvatar:myProfile.avatar,toUid:peerUid,chatId:currentChatId,status:'ringing',createdAt:Date.now(),callerDescription:{type:offerDesc.type,sdp:offerDesc.sdp}};await set(sessionRef,callData);await set(ref(db,'calls1to1/'+peerUid+'/'+sessionRef.key),callData);const peerSessionRef=ref(db,'calls1to1/'+peerUid+'/'+sessionRef.key);if(callState.unsub)callState.unsub();callState.unsub=onValue(peerSessionRef,async(snap)=>{if(!snap.exists())return;const data=snap.val();if(data.calleeDescription&&!callState.remoteDescSet){try{await pc.setRemoteDescription(new RTCSessionDescription(data.calleeDescription));callState.remoteDescSet=true;for(const cand of callState.pendingCandidates){try{await pc.addIceCandidate(new RTCIceCandidate(cand))}catch(e){}}callState.pendingCandidates=[]}catch(e){console.warn('setRemoteDescription失敗:',e)}}if(data.calleeCandidates){const cands=Object.values(data.calleeCandidates);if(!callState.remoteDescSet){cands.forEach(c=>callState.pendingCandidates.push(c))}else{for(const cand of cands){try{await pc.addIceCandidate(new RTCIceCandidate(cand))}catch(e){}}}}if(data.status==='accepted'&&!callState.connected){callState.connected=true;updateCallUI()}if(data.status==='rejected'||data.status==='ended'){showBanner('相手が通話を終了しました',true);endCall(false)}});showCallPanel(peerProfile,'発信中...')}
-function initCallIncomingListener(){if(!currentUser)return;const myCallsRef=ref(db,'calls1to1/'+currentUser.uid);if(incomingCallUnsubs.myCalls)incomingCallUnsubs.myCalls();incomingCallUnsubs.myCalls=onValue(myCallsRef,(snap)=>{if(!snap.exists())return;const calls=snap.val();if(callState.active)return;for(const[sid,data]of Object.entries(calls)){if(data.status==='ringing'&&data.toUid===currentUser.uid&&data.fromUid!==currentUser.uid){showIncomingCall(sid,data);return}}},()=>{})}
+async function startCall(peerUid){if(callState.active){showBanner('既に通話中です',true);return}if(!currentUser||!currentChatId)return;callState.active=true;callState.role='caller';callState.chatId=currentChatId;callState.peerUid=peerUid;callState.connected=false;callState.isMinimized=false;callState.micEnabled=true;callState.remoteDescSet=false;callState.pendingCandidates=[];const sessionRef=push(ref(db,'calls/'+currentUser.uid));callState.sessionId=sessionRef.key;callState.callDocRef=sessionRef;const peerProfile=getProfileForUid(peerUid);try{const localStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});callState.localStream=localStream}catch(e){console.warn('マイク取得失敗:',e);showBanner('マイクへのアクセスが拒否されました',true)}const pc=new RTCPeerConnection(ICE_SERVERS);callState.pc=pc;if(callState.localStream){callState.localStream.getTracks().forEach(track=>pc.addTrack(track,callState.localStream))}pc.onicecandidate=(e)=>{if(e.candidate&&callState.sessionId){const candRef=ref(db,'calls/'+currentUser.uid+'/'+callState.sessionId+'/callerCandidates');push(candRef,e.candidate.toJSON())}};pc.ontrack=(e)=>{if(e.streams&&e.streams[0]){callState.remoteStream=e.streams[0];const audioEl=new Audio();audioEl.srcObject=e.streams[0];audioEl.play().catch(()=>{})}};pc.onconnectionstatechange=()=>{if(pc.connectionState==='connected'){callState.connected=true;updateCallUI()}else if(pc.connectionState==='failed'||pc.connectionState==='disconnected'){showBanner('通話接続が切断されました',true);endCall(false)}};const offerDesc=await pc.createOffer();await pc.setLocalDescription(offerDesc);const callData={fromUid:currentUser.uid,fromName:myProfile.nickname,fromAvatar:myProfile.avatar,toUid:peerUid,chatId:currentChatId,status:'ringing',createdAt:Date.now(),callerDescription:{type:offerDesc.type,sdp:offerDesc.sdp}};await set(sessionRef,callData);await set(ref(db,'calls/'+peerUid+'/'+sessionRef.key),callData);const peerSessionRef=ref(db,'calls/'+peerUid+'/'+sessionRef.key);if(callState.unsub)callState.unsub();callState.unsub=onValue(peerSessionRef,async(snap)=>{if(!snap.exists())return;const data=snap.val();if(data.calleeDescription&&!callState.remoteDescSet){try{await pc.setRemoteDescription(new RTCSessionDescription(data.calleeDescription));callState.remoteDescSet=true;for(const cand of callState.pendingCandidates){try{await pc.addIceCandidate(new RTCIceCandidate(cand))}catch(e){}}callState.pendingCandidates=[]}catch(e){console.warn('setRemoteDescription失敗:',e)}}if(data.calleeCandidates){const cands=Object.values(data.calleeCandidates);if(!callState.remoteDescSet){cands.forEach(c=>callState.pendingCandidates.push(c))}else{for(const cand of cands){try{await pc.addIceCandidate(new RTCIceCandidate(cand))}catch(e){}}}}if(data.status==='accepted'&&!callState.connected){callState.connected=true;updateCallUI()}if(data.status==='rejected'||data.status==='ended'){showBanner('相手が通話を終了しました',true);endCall(false)}});showCallPanel(peerProfile,'発信中...')}
+let incomingCallUnsubs={};
+function initCallIncomingListener(){if(!currentUser)return;const myCallsRef=ref(db,'calls/'+currentUser.uid);if(incomingCallUnsubs.myCalls)incomingCallUnsubs.myCalls();incomingCallUnsubs.myCalls=onValue(myCallsRef,(snap)=>{if(!snap.exists())return;const calls=snap.val();if(callState.active)return;for(const[sid,data]of Object.entries(calls)){if(data.status==='ringing'&&data.toUid===currentUser.uid&&data.fromUid!==currentUser.uid){showIncomingCall(sid,data);return}}},()=>{})}
 let incomingCallSessionId=null;
 function showIncomingCall(sessionId,data){if(incomingCallSessionId===sessionId)return;incomingCallSessionId=sessionId;const fromProfile=getProfileForUid(data.fromUid);document.getElementById('icAvatar').src=fromProfile.avatar;document.getElementById('icName').textContent=fromProfile.nickname;document.getElementById('icStatus').textContent='音声通話の着信...';document.getElementById('incomingCallOverlay').classList.add('show');playIncomingSound()}
 let incomingAudioCtx=null;
@@ -1998,218 +1895,15 @@ function playIncomingSound(){try{if(!incomingAudioCtx)incomingAudioCtx=new(windo
 document.getElementById('icAcceptBtn').addEventListener('click',async()=>{if(!incomingCallSessionId)return;await acceptIncomingCall(incomingCallSessionId)});
 document.getElementById('icRejectBtn').addEventListener('click',async()=>{if(!incomingCallSessionId)return;await rejectIncomingCall(incomingCallSessionId)});
 function hideIncomingCall(){document.getElementById('incomingCallOverlay').classList.remove('show');incomingCallSessionId=null}
-async function acceptIncomingCall(sessionId){if(callState.active){hideIncomingCall();return}const callRef=ref(db,'calls1to1/'+currentUser.uid+'/'+sessionId);const snap=await get(callRef);if(!snap.exists()){hideIncomingCall();return}const data=snap.val();if(data.status!=='ringing'){hideIncomingCall();return}callState.active=true;callState.role='callee';callState.sessionId=sessionId;callState.chatId=data.chatId;callState.peerUid=data.fromUid;callState.connected=false;callState.isMinimized=false;callState.micEnabled=true;callState.callDocRef=callRef;callState.remoteDescSet=false;callState.pendingCandidates=[];try{const localStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});callState.localStream=localStream}catch(e){showBanner('マイクへのアクセスが拒否されました',true)}const pc=new RTCPeerConnection(ICE_SERVERS);callState.pc=pc;if(callState.localStream){callState.localStream.getTracks().forEach(track=>pc.addTrack(track,callState.localStream))}pc.onicecandidate=(e)=>{if(e.candidate){const candRef=ref(db,'calls1to1/'+currentUser.uid+'/'+sessionId+'/calleeCandidates');push(candRef,e.candidate.toJSON())}};pc.ontrack=(e)=>{if(e.streams&&e.streams[0]){callState.remoteStream=e.streams[0];const audioEl=new Audio();audioEl.srcObject=e.streams[0];audioEl.play().catch(()=>{})}};pc.onconnectionstatechange=()=>{if(pc.connectionState==='connected'){callState.connected=true;updateCallUI()}else if(pc.connectionState==='failed'||pc.connectionState==='disconnected'){showBanner('通話接続が切断されました',true);endCall(false)}};if(data.callerDescription){try{await pc.setRemoteDescription(new RTCSessionDescription(data.callerDescription));callState.remoteDescSet=true}catch(e){console.warn('setRemoteDescription失敗:',e)}}const answerDesc=await pc.createAnswer();await pc.setLocalDescription(answerDesc);const answerData={calleeDescription:{type:answerDesc.type,sdp:answerDesc.sdp},status:'accepted'};await update(callRef,answerData);await update(ref(db,'calls1to1/'+data.fromUid+'/'+sessionId),answerData);if(callState.unsub)callState.unsub();callState.unsub=onValue(ref(db,'calls1to1/'+data.fromUid+'/'+sessionId),async(snap)=>{if(!snap.exists())return;const cd=snap.val();if(cd.callerDescription&&!callState.remoteDescSet){try{await pc.setRemoteDescription(new RTCSessionDescription(cd.callerDescription));callState.remoteDescSet=true;for(const cand of callState.pendingCandidates){try{await pc.addIceCandidate(new RTCIceCandidate(cand))}catch(e){}}callState.pendingCandidates=[]}catch(e){}}if(cd.callerCandidates){const cands=Object.values(cd.callerCandidates);if(!callState.remoteDescSet){cands.forEach(c=>callState.pendingCandidates.push(c))}else{for(const cand of cands){try{await pc.addIceCandidate(new RTCIceCandidate(cand))}catch(e){}}}}if(cd.status==='ended')endCall(false)});hideIncomingCall();const peerProfile=getProfileForUid(data.fromUid);showCallPanel(peerProfile,'接続中...')}
-async function rejectIncomingCall(sessionId){const callRef=ref(db,'calls1to1/'+currentUser.uid+'/'+sessionId);try{const snap=await get(callRef);if(snap.exists()){const data=snap.val();await update(callRef,{status:'rejected'});await update(ref(db,'calls1to1/'+data.fromUid+'/'+sessionId),{status:'rejected'})}await remove(callRef)}catch(e){}hideIncomingCall()}
+async function acceptIncomingCall(sessionId){if(callState.active){hideIncomingCall();return}const callRef=ref(db,'calls/'+currentUser.uid+'/'+sessionId);const snap=await get(callRef);if(!snap.exists()){hideIncomingCall();return}const data=snap.val();if(data.status!=='ringing'){hideIncomingCall();return}callState.active=true;callState.role='callee';callState.sessionId=sessionId;callState.chatId=data.chatId;callState.peerUid=data.fromUid;callState.connected=false;callState.isMinimized=false;callState.micEnabled=true;callState.callDocRef=callRef;callState.remoteDescSet=false;callState.pendingCandidates=[];try{const localStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});callState.localStream=localStream}catch(e){showBanner('マイクへのアクセスが拒否されました',true)}const pc=new RTCPeerConnection(ICE_SERVERS);callState.pc=pc;if(callState.localStream){callState.localStream.getTracks().forEach(track=>pc.addTrack(track,callState.localStream))}pc.onicecandidate=(e)=>{if(e.candidate){const candRef=ref(db,'calls/'+currentUser.uid+'/'+sessionId+'/calleeCandidates');push(candRef,e.candidate.toJSON())}};pc.ontrack=(e)=>{if(e.streams&&e.streams[0]){callState.remoteStream=e.streams[0];const audioEl=new Audio();audioEl.srcObject=e.streams[0];audioEl.play().catch(()=>{})}};pc.onconnectionstatechange=()=>{if(pc.connectionState==='connected'){callState.connected=true;updateCallUI()}else if(pc.connectionState==='failed'||pc.connectionState==='disconnected'){showBanner('通話接続が切断されました',true);endCall(false)}};if(data.callerDescription){try{await pc.setRemoteDescription(new RTCSessionDescription(data.callerDescription));callState.remoteDescSet=true}catch(e){console.warn('setRemoteDescription失敗:',e)}}const answerDesc=await pc.createAnswer();await pc.setLocalDescription(answerDesc);const answerData={calleeDescription:{type:answerDesc.type,sdp:answerDesc.sdp},status:'accepted'};await update(callRef,answerData);await update(ref(db,'calls/'+data.fromUid+'/'+sessionId),answerData);if(callState.unsub)callState.unsub();callState.unsub=onValue(ref(db,'calls/'+data.fromUid+'/'+sessionId),async(snap)=>{if(!snap.exists())return;const cd=snap.val();if(cd.callerDescription&&!callState.remoteDescSet){try{await pc.setRemoteDescription(new RTCSessionDescription(cd.callerDescription));callState.remoteDescSet=true;for(const cand of callState.pendingCandidates){try{await pc.addIceCandidate(new RTCIceCandidate(cand))}catch(e){}}callState.pendingCandidates=[]}catch(e){}}if(cd.callerCandidates){const cands=Object.values(cd.callerCandidates);if(!callState.remoteDescSet){cands.forEach(c=>callState.pendingCandidates.push(c))}else{for(const cand of cands){try{await pc.addIceCandidate(new RTCIceCandidate(cand))}catch(e){}}}}if(cd.status==='ended')endCall(false)});hideIncomingCall();const peerProfile=getProfileForUid(data.fromUid);showCallPanel(peerProfile,'接続中...')}
+async function rejectIncomingCall(sessionId){const callRef=ref(db,'calls/'+currentUser.uid+'/'+sessionId);try{const snap=await get(callRef);if(snap.exists()){const data=snap.val();await update(callRef,{status:'rejected'});await update(ref(db,'calls/'+data.fromUid+'/'+sessionId),{status:'rejected'})}await remove(callRef)}catch(e){}hideIncomingCall()}
 function showCallPanel(peerProfile,statusText){document.getElementById('cpTitle').textContent='音声通話: '+peerProfile.nickname;document.getElementById('cpAvatarImg').src=peerProfile.avatar;document.getElementById('cpName').textContent=peerProfile.nickname;document.getElementById('cpStatus').textContent=statusText;document.getElementById('cpStatusBar').textContent=statusText;document.getElementById('callPanel').classList.add('show');document.getElementById('callPanel').classList.remove('minimized');callState.isMinimized=false;updateCallUI()}
 document.getElementById('cpMicBtn').addEventListener('click',()=>{callState.micEnabled=!callState.micEnabled;if(callState.localStream){callState.localStream.getAudioTracks().forEach(t=>{t.enabled=callState.micEnabled})}updateCallUI()});
 document.getElementById('cpMinimizeBtn').addEventListener('click',()=>{callState.isMinimized=!callState.isMinimized;document.getElementById('callPanel').classList.toggle('minimized',callState.isMinimized)});
 document.getElementById('cpEndBtn').addEventListener('click',()=>endCall(true));
-async function endCall(notifyRemote=true){if(!callState.active)return;try{if(notifyRemote&&currentUser&&callState.sessionId){await update(ref(db,'calls1to1/'+currentUser.uid+'/'+callState.sessionId),{status:'ended',endedAt:Date.now()}).catch(()=>{});if(callState.peerUid){await update(ref(db,'calls1to1/'+callState.peerUid+'/'+callState.sessionId),{status:'ended',endedAt:Date.now()}).catch(()=>{})}}}catch(e){}if(callState.pc){try{callState.pc.close()}catch(e){}}if(callState.localStream){callState.localStream.getTracks().forEach(t=>t.stop())}if(callState.unsub){callState.unsub();callState.unsub=null}if(currentUser&&callState.sessionId){remove(ref(db,'calls1to1/'+currentUser.uid+'/'+callState.sessionId)).catch(()=>{})}if(callState.peerUid&&callState.sessionId){remove(ref(db,'calls1to1/'+callState.peerUid+'/'+callState.sessionId)).catch(()=>{})}callState={active:false,role:null,chatId:null,peerUid:null,sessionId:null,pc:null,localStream:null,remoteStream:null,micEnabled:true,pendingCandidates:[],callDocRef:null,unsub:null,isMinimized:false,connected:false,remoteDescSet:false};document.getElementById('callPanel').classList.remove('show');hideIncomingCall();updateChatHeader()}
+async function endCall(notifyRemote=true){if(!callState.active)return;try{if(notifyRemote&&currentUser&&callState.sessionId){await update(ref(db,'calls/'+currentUser.uid+'/'+callState.sessionId),{status:'ended',endedAt:Date.now()}).catch(()=>{});if(callState.peerUid){await update(ref(db,'calls/'+callState.peerUid+'/'+callState.sessionId),{status:'ended',endedAt:Date.now()}).catch(()=>{})}}}catch(e){}if(callState.pc){try{callState.pc.close()}catch(e){}}if(callState.localStream){callState.localStream.getTracks().forEach(t=>t.stop())}if(callState.unsub){callState.unsub();callState.unsub=null}if(currentUser&&callState.sessionId){remove(ref(db,'calls/'+currentUser.uid+'/'+callState.sessionId)).catch(()=>{})}if(callState.peerUid&&callState.sessionId){remove(ref(db,'calls/'+callState.peerUid+'/'+callState.sessionId)).catch(()=>{})}callState={active:false,role:null,chatId:null,peerUid:null,sessionId:null,pc:null,localStream:null,remoteStream:null,micEnabled:true,pendingCandidates:[],callDocRef:null,unsub:null,isMinimized:false,connected:false,remoteDescSet:false};document.getElementById('callPanel').classList.remove('show');hideIncomingCall();updateChatHeader()}
+document.getElementById('chatCallBtn').addEventListener('click',async()=>{if(!currentChatId||!currentUser)return;const chat=chatsCache[currentChatId];if(!chat)return;if(chat.type!=='direct'){showBanner('音声通話は1対1チャットでのみ可能です',true);return}const otherUid=Object.keys(chat.members||{}).find(uid=>uid!==currentUser.uid);if(!otherUid)return;if(callState.active){showBanner('既に通話中です',true);return}await startCall(otherUid)});
 
-document.getElementById('chatCallBtn').addEventListener('click',async()=>{
-  if(!currentChatId||!currentUser)return;
-  const chat=chatsCache[currentChatId];if(!chat)return;
-  if(groupCallState.active){showBanner('既に通話中です',true);return}
-  await startGroupCall(currentChatId,'audio');
-});
-document.getElementById('chatVideoBtn').addEventListener('click',async()=>{
-  if(!currentChatId||!currentUser)return;
-  const chat=chatsCache[currentChatId];if(!chat)return;
-  if(groupCallState.active){showBanner('既に通話中です',true);return}
-  await startGroupCall(currentChatId,'video');
-});
-
-/* ============================================================
-   ★ グループ通話（音声・ビデオ）
-   ============================================================ */
-function getCallRef(chatId,sessionId){return ref(db,'calls/'+chatId+'/'+sessionId)}
-
-async function startGroupCall(chatId,type){
-  if(!currentUser)return;
-  if(groupCallState.active){showBanner('既に通話中です',true);return}
-  const chat=chatsCache[chatId];if(!chat)return;
-  if(!chat.members||!chat.members[currentUser.uid]){showBanner('メンバーではありません',true);return}
-  const sessionRef=push(ref(db,'calls/'+chatId));
-  const sessionId=sessionRef.key;
-  const now=Date.now();
-  const mediaType=(type==='video')?'video':'audio';
-  await set(sessionRef,{chatId,type:mediaType,startedBy:currentUser.uid,startedByName:myProfile.nickname||'名無しさん',startedByAvatar:myProfile.avatar||DEFAULT_AVATAR,createdAt:now,ended:false});
-  const sysRef=push(ref(db,'chatMessages/'+chatId));
-  await set(sysRef,{system:true,callSystem:true,callSessionId:sessionId,content:(myProfile.nickname||'名無しさん')+' が'+(mediaType==='video'?'ビデオ':'音声')+'通話を開始しました。',authorUid:currentUser.uid,createdAt:now});
-  await joinGroupCall(chatId,sessionId,mediaType);
-}
-
-async function joinGroupCall(chatId,sessionId,type){
-  if(!currentUser)return;
-  if(groupCallState.active)return;
-  groupCallState.active=true;
-  groupCallState.chatId=chatId;
-  groupCallState.sessionId=sessionId;
-  groupCallState.type=type||'audio';
-  groupCallState.camEnabled=(type==='video');
-  groupCallState.pcs={};groupCallState.streams={};groupCallState.joinedUids={};
-  try{const constraints={audio:true,video:groupCallState.camEnabled};groupCallState.localStream=await navigator.mediaDevices.getUserMedia(constraints)}
-  catch(e){console.warn('マイク/カメラ取得失敗:',e);showBanner('マイクまたはカメラへのアクセスが拒否されました',true);try{groupCallState.localStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});groupCallState.camEnabled=false}catch(e2){groupCallState.localStream=null}}
-  const myPartRef=ref(db,'calls/'+chatId+'/'+sessionId+'/participants/'+currentUser.uid);
-  await set(myPartRef,{joinedAt:Date.now(),nickname:myProfile.nickname||'名無しさん',avatar:myProfile.avatar||DEFAULT_AVATAR,media:groupCallState.camEnabled?'video':'audio'});
-  onDisconnect(myPartRef).update({leftAt:Date.now()});
-  const partsRef=ref(db,'calls/'+chatId+'/'+sessionId+'/participants');
-  const unsubParts=onValue(partsRef,async(snap)=>{
-    if(!snap.exists()){await finishGroupCallIfEmpty();return}
-    const parts=snap.val();
-    groupCallState.joinedUids=parts;
-    const others=Object.keys(parts).filter(uid=>uid!==currentUser.uid&&!parts[uid].leftAt);
-    for(const uid of others){
-      if(!groupCallState.pcs[uid]){
-        // ★ 修正①：辞書順で自分が小さい場合のみofferを送る（glare回避）
-        const iAmInitiator = currentUser.uid < uid;
-        await createPeerConnection(uid, iAmInitiator);
-      }
-    }
-    Object.keys(groupCallState.pcs).forEach(uid=>{if(!parts[uid]||parts[uid].leftAt){try{groupCallState.pcs[uid].close()}catch(e){}delete groupCallState.pcs[uid];delete groupCallState.streams[uid]}});
-    updateGroupCallUI();
-    if(groupCallState.camEnabled)renderVideoCallGrid();
-    await finishGroupCallIfEmpty();
-  });
-  groupCallState.unsubs.push(unsubParts);
-  const sessRef=getCallRef(chatId,sessionId);
-  const unsubSess=onValue(sessRef,(snap)=>{
-    if(!snap.exists())return;
-    const d=snap.val();
-    if(d.ended){showBanner('通話が終了しました',false);leaveGroupCall(false)}
-  });
-  groupCallState.unsubs.push(unsubSess);
-  if(groupCallState.camEnabled)showVideoCallOverlay();
-  updateGroupCallUI();
-}
-
-async function createPeerConnection(peerUid,isInitiator){
-  if(!currentUser)return;
-  const pc=new RTCPeerConnection(ICE_SERVERS);
-  groupCallState.pcs[peerUid]=pc;
-  if(groupCallState.localStream){groupCallState.localStream.getTracks().forEach(t=>pc.addTrack(t,groupCallState.localStream))}
-  pc.onicecandidate=(e)=>{if(e.candidate){push(ref(db,'calls/'+groupCallState.chatId+'/'+groupCallState.sessionId+'/participants/'+currentUser.uid+'/candidates'),e.candidate.toJSON()).catch(()=>{})}};
-  // ★ 修正②：トラック種別ごとに処理
-  pc.ontrack=(e)=>{
-    if(!e.streams||!e.streams[0])return;
-    groupCallState.streams[peerUid]=e.streams[0];
-    if(e.track&&e.track.kind==='video'){
-      attachRemoteVideo(peerUid,e.streams[0]);
-    }
-    if(e.track&&e.track.kind==='audio'){
-      const audio=new Audio();
-      audio.srcObject=e.streams[0];
-      audio.play().catch(()=>{});
-    }
-    updateGroupCallUI();
-  };
-  pc.onconnectionstatechange=()=>{if(pc.connectionState==='failed'||pc.connectionState==='disconnected'){try{pc.close()}catch(e){}delete groupCallState.pcs[peerUid];updateGroupCallUI()}};
-  const peerPartRef=ref(db,'calls/'+groupCallState.chatId+'/'+groupCallState.sessionId+'/participants/'+peerUid);
-  const unsubPeer=onValue(peerPartRef,async(snap)=>{
-    if(!snap.exists())return;
-    const d=snap.val();
-    if(d.leftAt){try{pc.close()}catch(e){}delete groupCallState.pcs[peerUid];updateGroupCallUI();return}
-    if(d.offer&&!pc.currentRemoteDescription&&!isInitiator){
-      try{
-        await pc.setRemoteDescription(new RTCSessionDescription(d.offer));
-        const ans=await pc.createAnswer();
-        await pc.setLocalDescription(ans);
-        await update(ref(db,'calls/'+groupCallState.chatId+'/'+groupCallState.sessionId+'/participants/'+currentUser.uid),{answer:{type:ans.type,sdp:ans.sdp}});
-      }catch(e){}
-    }
-    if(d.answer&&pc.currentRemoteDescription===null&&isInitiator){try{await pc.setRemoteDescription(new RTCSessionDescription(d.answer))}catch(e){}}
-    if(d.candidates){Object.values(d.candidates).forEach(async(c)=>{try{await pc.addIceCandidate(new RTCIceCandidate(c))}catch(e){}})}
-  });
-  groupCallState.unsubs.push(unsubPeer);
-  if(isInitiator){
-    try{const offer=await pc.createOffer();await pc.setLocalDescription(offer);await update(ref(db,'calls/'+groupCallState.chatId+'/'+groupCallState.sessionId+'/participants/'+currentUser.uid),{offer:{type:offer.type,sdp:offer.sdp}})}catch(e){}
-  }
-}
-
-async function finishGroupCallIfEmpty(){
-  if(!groupCallState.active)return;
-  const sessRef=getCallRef(groupCallState.chatId,groupCallState.sessionId);
-  const snap=await get(sessRef);
-  if(!snap.exists())return;
-  const d=snap.val();
-  if(d.ended)return;
-  const parts=await get(ref(db,'calls/'+groupCallState.chatId+'/'+groupCallState.sessionId+'/participants'));
-  if(!parts.exists()||Object.values(parts.val()).every(p=>p.leftAt)){
-    await update(sessRef,{ended:true,endedAt:Date.now()});
-    const sysRef=push(ref(db,'chatMessages/'+groupCallState.chatId));
-    await set(sysRef,{system:true,content:'通話が終了しました',authorUid:currentUser.uid,createdAt:Date.now()});
-    leaveGroupCall(false);
-  }
-}
-
-async function leaveGroupCall(notify=true){
-  if(!groupCallState.active)return;
-  try{if(currentUser&&groupCallState.chatId&&groupCallState.sessionId){await update(ref(db,'calls/'+groupCallState.chatId+'/'+groupCallState.sessionId+'/participants/'+currentUser.uid),{leftAt:Date.now()}).catch(()=>{})}}catch(e){}
-  Object.values(groupCallState.pcs).forEach(pc=>{try{pc.close()}catch(e){}});
-  if(groupCallState.localStream){groupCallState.localStream.getTracks().forEach(t=>t.stop())}
-  groupCallState.unsubs.forEach(fn=>{try{fn()}catch(e){}});
-  groupCallState.unsubs=[];
-  groupCallState.pcs={};groupCallState.streams={};
-  groupCallState.active=false;groupCallState.chatId=null;groupCallState.sessionId=null;
-  groupCallState.localStream=null;groupCallState.joinedUids={};
-  hideVideoCallOverlay();
-  await finishGroupCallIfEmpty();
-  updateGroupCallUI();
-}
-
-function showVideoCallOverlay(){const ov=document.getElementById('videoCallOverlay');if(!ov)return;ov.classList.add('show');renderVideoCallGrid()}
-function hideVideoCallOverlay(){const ov=document.getElementById('videoCallOverlay');if(!ov)return;ov.classList.remove('show');document.getElementById('videoCallGrid').innerHTML=''}
-// ★ 修正③：相手の映像を確実に描画
-function attachRemoteVideo(uid,stream){
-  let tile=document.getElementById('vtile-'+uid);
-  if(!tile){
-    tile=document.createElement('div');
-    tile.id='vtile-'+uid;
-    tile.className='video-tile';
-    document.getElementById('videoCallGrid').appendChild(tile);
-  }
-  let v=tile.querySelector('video');
-  if(!v){
-    v=document.createElement('video');
-    v.autoplay=true;
-    v.playsInline=true;
-    v.muted=false;
-    v.setAttribute('playsinline','');
-    tile.appendChild(v);
-  }
-  if(v.srcObject!==stream){
-    v.srcObject=stream;
-    v.play().catch(()=>{});
-  }
-  const p=getProfileForUid(uid);
-  if(!tile.querySelector('.vt-name')){
-    const n=document.createElement('div');
-    n.className='vt-name';
-    n.textContent=p.nickname;
-    tile.appendChild(n);
-  }
-}
-function renderVideoCallGrid(){const grid=document.getElementById('videoCallGrid');if(!grid)return;grid.innerHTML='';if(groupCallState.localStream){const tile=document.createElement('div');tile.className='video-tile';const v=document.createElement('video');v.autoplay=true;v.muted=true;v.playsInline=true;v.srcObject=groupCallState.localStream;tile.appendChild(v);const n=document.createElement('div');n.className='vt-name';n.textContent=(myProfile.nickname||'あなた')+'（あなた）';tile.appendChild(n);grid.appendChild(tile)}Object.entries(groupCallState.streams).forEach(([uid,stream])=>{if(stream)attachRemoteVideo(uid,stream)})}
-function updateGroupCallUI(){const count=document.getElementById('vcCount');if(count){const active=Object.values(groupCallState.joinedUids||{}).filter(p=>!p.leftAt).length;count.textContent=active+'人'}}
-document.getElementById('vcMinimizeBtn').addEventListener('click',()=>{document.getElementById('videoCallOverlay').classList.remove('show')});
-document.getElementById('vcEndBtn').addEventListener('click',()=>{leaveGroupCall(true)});
-document.getElementById('vcMicBtn').addEventListener('click',()=>{if(!groupCallState.active)return;groupCallState.micEnabled=!groupCallState.micEnabled;if(groupCallState.localStream){groupCallState.localStream.getAudioTracks().forEach(t=>{t.enabled=groupCallState.micEnabled})}const b=document.getElementById('vcMicBtn');if(b)b.classList.toggle('off',!groupCallState.micEnabled)});
-document.getElementById('vcCamBtn').addEventListener('click',async()=>{
-  if(!groupCallState.active)return;
-  groupCallState.camEnabled=!groupCallState.camEnabled;
-  if(groupCallState.localStream){groupCallState.localStream.getTracks().forEach(t=>t.stop())}
-  try{groupCallState.localStream=await navigator.mediaDevices.getUserMedia({audio:true,video:groupCallState.camEnabled})}
-  catch(e){groupCallState.camEnabled=false;try{groupCallState.localStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false})}catch(e2){groupCallState.localStream=null}}
-  Object.values(groupCallState.pcs).forEach(pc=>{pc.getSenders().forEach(s=>{if(s.track&&s.track.kind==='video')try{pc.removeTrack(s)}catch(e){}});if(groupCallState.localStream)groupCallState.localStream.getTracks().forEach(t=>pc.addTrack(t,groupCallState.localStream))});
-  if(groupCallState.camEnabled)showVideoCallOverlay();else hideVideoCallOverlay();
-  const b=document.getElementById('vcCamBtn');if(b)b.classList.toggle('off',!groupCallState.camEnabled);
-});
-
-function initGroupCallIncomingListener(){/* participants変更はjoin時のみ監視 */}
-
-/* ============================================================
-   ★ アナウンス
-   ============================================================ */
 function initAnnouncementListener(){if(unsubs.announcement)unsubs.announcement();unsubs.announcement=onValue(ref(db,'announcement'),(snap)=>{if(!snap.exists())return;const ann=snap.val();if(!ann||!ann.text||!ann.createdAt)return;if(dismissedAnnouncements[ann.createdAt])return;if(ann.expiresAt&&Date.now()>ann.expiresAt)return;announcementText.textContent=ann.text;announcementBanner.classList.add('show');announcementBanner.dataset.createdAt=ann.createdAt;if(announcementTimer)clearTimeout(announcementTimer);announcementTimer=setTimeout(()=>{announcementBanner.classList.remove('show')},ann.durationMs||30000)},()=>{})}
 document.getElementById('announcementClose').addEventListener('click',()=>{announcementBanner.classList.remove('show');const cur=announcementBanner.dataset.createdAt;if(cur){dismissedAnnouncements[cur]=true;saveJson(ANNOUNCE_DISMISS_KEY,dismissedAnnouncements)}});
 document.getElementById('announceBtn').addEventListener('click',()=>{document.getElementById('announceTextInput').value='';document.getElementById('announceDurationInput').value=30;document.getElementById('announceModal').classList.remove('hidden')});
@@ -2217,15 +1911,12 @@ document.getElementById('announceCancel').addEventListener('click',()=>document.
 document.getElementById('announceModal').addEventListener('click',(e)=>{if(e.target.id==='announceModal')document.getElementById('announceModal').classList.add('hidden')});
 document.getElementById('announceSend').addEventListener('click',async()=>{const text=document.getElementById('announceTextInput').value.trim();const dur=parseInt(document.getElementById('announceDurationInput').value)||30;if(!text){alert('メッセージを入力してください。');return}if(!currentUser||!isAdmin(currentUser.email))return;try{await set(ref(db,'announcement'),{text,createdAt:Date.now(),createdBy:currentUser.uid,createdByEmail:currentUser.email||'',createdByName:myProfile.nickname||'',durationMs:Math.max(5000,Math.min(300000,dur*1000)),expiresAt:Date.now()+Math.max(5000,Math.min(300000,dur*1000))});document.getElementById('announceModal').classList.add('hidden');showBanner('アナウンスを送信しました',false)}catch(err){showBanner('送信に失敗しました',true)}});
 
-/* ============================================================
-   ★ リスナー群
-   ============================================================ */
 function initMyProfileListener(){if(!currentUser)return;if(unsubs.profiles){unsubs.profiles();unsubs.profiles=null}unsubs.profiles=onValue(ref(db,'chatProfiles/'+currentUser.uid),(snap)=>{if(!snap.exists())return;const p=snap.val();myProfile={nickname:p.nickname||currentUser.displayName||'名無しさん',avatar:p.avatar||currentUser.photoURL||DEFAULT_AVATAR};updateMyProfileUI()},()=>{})}
 function initBansListener(){if(unsubs.bans)unsubs.bans();unsubs.bans=onValue(ref(db,'bans'),(snap)=>{bansCache=snap.exists()?snap.val():{};if(currentUser&&bansCache[currentUser.uid])executeBan();renderBanList()},()=>{});if(unsubs.emailBans)unsubs.emailBans();unsubs.emailBans=onValue(ref(db,'emailBans'),(snap)=>{emailBansCache=snap.exists()?snap.val():{};if(currentUser&&currentUser.email){const emailKey=sanitizeEmailKey(currentUser.email);if(emailBansCache[emailKey])executeBan()}renderBanList()},()=>{});if(unsubs.deviceLinks)unsubs.deviceLinks();unsubs.deviceLinks=onValue(ref(db,'deviceLinks'),(snap)=>{deviceLinksCache=snap.exists()?snap.val():{}},()=>{})}
 function initChatsListener(){if(unsubs.chats)unsubs.chats();if(!currentUser)return;const chatsQuery=query(ref(db,'userChats/'+currentUser.uid),orderByChild('lastMessageAt'),limitToLast(CHATS_LIST_LIMIT));unsubs.chats=onValue(chatsQuery,(snap)=>{const newChats=snap.exists()?snap.val():{};const firstLoad=Object.keys(chatsCache).length===0&&Object.keys(newChats).length>0;chatsCache=newChats;if(firstLoad){let changed=false;Object.keys(newChats).forEach(chatId=>{const chat=newChats[chatId];if(!chat)return;const latestAt=chat.lastMessageAt||chat.createdAt||0;const lastRead=lastReadAt[chatId]||0;const sender=chat.lastSenderUid||'';if(sender===currentUser.uid||lastRead>=latestAt){if(unreadCounts[chatId]){delete unreadCounts[chatId];changed=true}}if(!chatLatestMsgAt[chatId]||chatLatestMsgAt[chatId]<latestAt){chatLatestMsgAt[chatId]=latestAt}});if(changed)saveJson(UNREAD_STORAGE_KEY,unreadCounts);refreshFavicon();updateScrollButton()}scheduleRenderChatList();initChatLatestListeners();renderStories();syncProfileListenersForChats();syncPresenceListenersForChats()},()=>{})}
 async function registerDeviceLink(user){if(!user||!user.email)return;const emailKey=sanitizeEmailKey(user.email);try{await set(ref(db,'deviceLinks/'+MY_DEVICE_ID+'/'+user.uid),{uid:user.uid,email:user.email,emailKey,nickname:myProfile.nickname||user.displayName||'名無しさん',linkedAt:Date.now()})}catch(e){}}
 document.getElementById('googleLoginBtn').addEventListener('click',async()=>{notificationAudioCtx.init();requestNotificationPermission();try{await signInWithPopup(auth,provider)}catch(err){if(err.code!=='auth/popup-closed-by-user')alert('ログイン失敗: '+err.message)}});
-document.getElementById('logoutBtn').addEventListener('click',async()=>{if(!confirm('ログアウトしますか？'))return;if(callState.active)await endCall(true);if(groupCallState.active)await leaveGroupCall(true);intentionalSignOut=true;try{await setMyTypingState(false);await setMyOffline()}catch(e){}Object.values(unsubs).forEach(fn=>{try{fn&&fn()}catch(e){}});Object.values(chatLatestListeners).forEach(fn=>{try{fn()}catch(e){}});Object.values(messageUnsubsByChatId).forEach(fn=>{try{fn&&fn()}catch(e){}});Object.values(incomingCallUnsubs).forEach(fn=>{try{fn&&fn()}catch(e){}});Object.values(profileUnsubs).forEach(fn=>{try{fn()}catch(e){}});Object.values(presenceUnsubs).forEach(fn=>{try{fn()}catch(e){}});stopEmergencyEnforcer();hideAdminCtrlDHint();removeEmergencyTriggeredByElement();if(banEnforcerInterval)clearInterval(banEnforcerInterval);try{sessionStorage.removeItem('__hasUser')}catch(e){}try{await signOut(auth)}catch(e){}location.reload()});
+document.getElementById('logoutBtn').addEventListener('click',async()=>{if(!confirm('ログアウトしますか？'))return;if(callState.active)await endCall(true);intentionalSignOut=true;try{await setMyTypingState(false);await setMyOffline()}catch(e){}Object.values(unsubs).forEach(fn=>{try{fn&&fn()}catch(e){}});Object.values(chatLatestListeners).forEach(fn=>{try{fn()}catch(e){}});Object.values(messageUnsubsByChatId).forEach(fn=>{try{fn&&fn()}catch(e){}});Object.values(incomingCallUnsubs).forEach(fn=>{try{fn&&fn()}catch(e){}});Object.values(profileUnsubs).forEach(fn=>{try{fn()}catch(e){}});Object.values(presenceUnsubs).forEach(fn=>{try{fn()}catch(e){}});stopEmergencyEnforcer();hideAdminCtrlDHint();removeEmergencyTriggeredByElement();if(banEnforcerInterval)clearInterval(banEnforcerInterval);try{sessionStorage.removeItem('__hasUser')}catch(e){}try{await signOut(auth)}catch(e){}location.reload()});
 document.getElementById('pendingApprovalLogoutBtn').addEventListener('click',async()=>{intentionalSignOut=true;try{await setMyOffline();await signOut(auth)}catch(e){}location.reload()});
 document.getElementById('switchAccountBtn').addEventListener('click',async()=>{intentionalSignOut=true;try{await setMyOffline();await signOut(auth)}catch(e){}banOverlay.classList.remove('show');document.body.style.background='';loginView.style.display='flex';mainView.style.display='none';bootOverlay.classList.add('hidden');if(banEnforcerInterval)clearInterval(banEnforcerInterval);setTimeout(()=>{intentionalSignOut=false},500)});
 function unlockAudio(){notificationAudioCtx.init()}
@@ -2275,8 +1966,7 @@ lightbox.addEventListener('click',(e)=>{if(e.target.id==='lightbox')lightbox.cla
 document.getElementById('backToChatListBtn').addEventListener('click',backToChatList);
 window.addEventListener('beforeunload',(e)=>{
   if(emergencyState.active&&currentUser&&isAdmin(currentUser.email)){e.preventDefault();e.returnValue='';return''}
-  if(callState.active){try{if(currentUser&&callState.sessionId){update(ref(db,'calls1to1/'+currentUser.uid+'/'+callState.sessionId),{status:'ended'}).catch(()=>{});if(callState.peerUid)update(ref(db,'calls1to1/'+callState.peerUid+'/'+callState.sessionId),{status:'ended'}).catch(()=>{})}}catch(err){}}
-  if(groupCallState.active&&currentUser&&groupCallState.chatId&&groupCallState.sessionId){try{update(ref(db,'calls/'+groupCallState.chatId+'/'+groupCallState.sessionId+'/participants/'+currentUser.uid),{leftAt:Date.now()}).catch(()=>{})}catch(err){}}
+  if(callState.active){try{if(currentUser&&callState.sessionId){update(ref(db,'calls/'+currentUser.uid+'/'+callState.sessionId),{status:'ended'}).catch(()=>{});if(callState.peerUid)update(ref(db,'calls/'+callState.peerUid+'/'+callState.sessionId),{status:'ended'}).catch(()=>{})}}catch(err){}}
   Object.values(unsubs).forEach(fn=>{try{fn&&fn()}catch(e){}});
   Object.values(messageUnsubsByChatId).forEach(fn=>{try{fn&&fn()}catch(e){}});
   Object.values(incomingCallUnsubs).forEach(fn=>{try{fn&&fn()}catch(e){}});
