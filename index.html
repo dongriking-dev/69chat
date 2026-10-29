@@ -1985,7 +1985,7 @@ emergencyBtn.addEventListener('touchcancel',()=>{cancelEmergencyPress();emergenc
 document.addEventListener('keydown',async(e)=>{if((e.ctrlKey||e.metaKey)&&(e.key==='d'||e.key==='D')){if(!emergencyState.active)return;if(!currentUser||!isAdmin(currentUser.email))return;e.preventDefault();e.stopPropagation();if(!confirm('緊急モードを解除しますか？'))return;try{await update(ref(db,'emergency'),{active:false,clearedBy:currentUser.uid,clearedByEmail:currentUser.email||'',clearedAt:Date.now()})}catch(err){alert('解除に失敗しました')}return false}if((e.ctrlKey||e.metaKey)&&(e.key==='d'||e.key==='D')&&emergencyState.active){e.preventDefault();e.stopPropagation();return false}},true);
 
 /* ============================================================
-   ★ 1対1通話（既存）
+   ★ 1対1通話（calls1to1）
    ============================================================ */
 let callState={active:false,role:null,chatId:null,peerUid:null,sessionId:null,pc:null,localStream:null,remoteStream:null,micEnabled:true,pendingCandidates:[],callDocRef:null,unsub:null,isMinimized:false,connected:false,remoteDescSet:false};
 function updateCallUI(){if(callState.connected){document.getElementById('cpStatusBar').textContent='通話中';document.getElementById('cpStatus').textContent='通話中'}const micBtn=document.getElementById('cpMicBtn');micBtn.classList.toggle('off',!callState.micEnabled);micBtn.innerHTML=callState.micEnabled?iconMic(22,'#fff'):iconMicOff(22,'#fff')}
@@ -2005,6 +2005,7 @@ document.getElementById('cpMicBtn').addEventListener('click',()=>{callState.micE
 document.getElementById('cpMinimizeBtn').addEventListener('click',()=>{callState.isMinimized=!callState.isMinimized;document.getElementById('callPanel').classList.toggle('minimized',callState.isMinimized)});
 document.getElementById('cpEndBtn').addEventListener('click',()=>endCall(true));
 async function endCall(notifyRemote=true){if(!callState.active)return;try{if(notifyRemote&&currentUser&&callState.sessionId){await update(ref(db,'calls1to1/'+currentUser.uid+'/'+callState.sessionId),{status:'ended',endedAt:Date.now()}).catch(()=>{});if(callState.peerUid){await update(ref(db,'calls1to1/'+callState.peerUid+'/'+callState.sessionId),{status:'ended',endedAt:Date.now()}).catch(()=>{})}}}catch(e){}if(callState.pc){try{callState.pc.close()}catch(e){}}if(callState.localStream){callState.localStream.getTracks().forEach(t=>t.stop())}if(callState.unsub){callState.unsub();callState.unsub=null}if(currentUser&&callState.sessionId){remove(ref(db,'calls1to1/'+currentUser.uid+'/'+callState.sessionId)).catch(()=>{})}if(callState.peerUid&&callState.sessionId){remove(ref(db,'calls1to1/'+callState.peerUid+'/'+callState.sessionId)).catch(()=>{})}callState={active:false,role:null,chatId:null,peerUid:null,sessionId:null,pc:null,localStream:null,remoteStream:null,micEnabled:true,pendingCandidates:[],callDocRef:null,unsub:null,isMinimized:false,connected:false,remoteDescSet:false};document.getElementById('callPanel').classList.remove('show');hideIncomingCall();updateChatHeader()}
+
 document.getElementById('chatCallBtn').addEventListener('click',async()=>{
   if(!currentChatId||!currentUser)return;
   const chat=chatsCache[currentChatId];if(!chat)return;
@@ -2019,7 +2020,7 @@ document.getElementById('chatVideoBtn').addEventListener('click',async()=>{
 });
 
 /* ============================================================
-   ★ グループ通話
+   ★ グループ通話（音声・ビデオ）
    ============================================================ */
 function getCallRef(chatId,sessionId){return ref(db,'calls/'+chatId+'/'+sessionId)}
 
@@ -2058,7 +2059,13 @@ async function joinGroupCall(chatId,sessionId,type){
     const parts=snap.val();
     groupCallState.joinedUids=parts;
     const others=Object.keys(parts).filter(uid=>uid!==currentUser.uid&&!parts[uid].leftAt);
-    for(const uid of others){if(!groupCallState.pcs[uid]){await createPeerConnection(uid,true)}}
+    for(const uid of others){
+      if(!groupCallState.pcs[uid]){
+        // ★ 修正①：辞書順で自分が小さい場合のみofferを送る（glare回避）
+        const iAmInitiator = currentUser.uid < uid;
+        await createPeerConnection(uid, iAmInitiator);
+      }
+    }
     Object.keys(groupCallState.pcs).forEach(uid=>{if(!parts[uid]||parts[uid].leftAt){try{groupCallState.pcs[uid].close()}catch(e){}delete groupCallState.pcs[uid];delete groupCallState.streams[uid]}});
     updateGroupCallUI();
     if(groupCallState.camEnabled)renderVideoCallGrid();
@@ -2082,7 +2089,20 @@ async function createPeerConnection(peerUid,isInitiator){
   groupCallState.pcs[peerUid]=pc;
   if(groupCallState.localStream){groupCallState.localStream.getTracks().forEach(t=>pc.addTrack(t,groupCallState.localStream))}
   pc.onicecandidate=(e)=>{if(e.candidate){push(ref(db,'calls/'+groupCallState.chatId+'/'+groupCallState.sessionId+'/participants/'+currentUser.uid+'/candidates'),e.candidate.toJSON()).catch(()=>{})}};
-  pc.ontrack=(e)=>{if(e.streams&&e.streams[0]){groupCallState.streams[peerUid]=e.streams[0];if(groupCallState.camEnabled){attachRemoteVideo(peerUid,e.streams[0])}else{const audio=new Audio();audio.srcObject=e.streams[0];audio.play().catch(()=>{})}updateGroupCallUI()}};
+  // ★ 修正②：トラック種別ごとに処理
+  pc.ontrack=(e)=>{
+    if(!e.streams||!e.streams[0])return;
+    groupCallState.streams[peerUid]=e.streams[0];
+    if(e.track&&e.track.kind==='video'){
+      attachRemoteVideo(peerUid,e.streams[0]);
+    }
+    if(e.track&&e.track.kind==='audio'){
+      const audio=new Audio();
+      audio.srcObject=e.streams[0];
+      audio.play().catch(()=>{});
+    }
+    updateGroupCallUI();
+  };
   pc.onconnectionstatechange=()=>{if(pc.connectionState==='failed'||pc.connectionState==='disconnected'){try{pc.close()}catch(e){}delete groupCallState.pcs[peerUid];updateGroupCallUI()}};
   const peerPartRef=ref(db,'calls/'+groupCallState.chatId+'/'+groupCallState.sessionId+'/participants/'+peerUid);
   const unsubPeer=onValue(peerPartRef,async(snap)=>{
@@ -2139,7 +2159,36 @@ async function leaveGroupCall(notify=true){
 
 function showVideoCallOverlay(){const ov=document.getElementById('videoCallOverlay');if(!ov)return;ov.classList.add('show');renderVideoCallGrid()}
 function hideVideoCallOverlay(){const ov=document.getElementById('videoCallOverlay');if(!ov)return;ov.classList.remove('show');document.getElementById('videoCallGrid').innerHTML=''}
-function attachRemoteVideo(uid,stream){let tile=document.getElementById('vtile-'+uid);if(!tile){tile=document.createElement('div');tile.id='vtile-'+uid;tile.className='video-tile';document.getElementById('videoCallGrid').appendChild(tile)}let v=tile.querySelector('video');if(!v){v=document.createElement('video');v.autoplay=true;v.playsInline=true;tile.appendChild(v)}v.srcObject=stream;const p=getProfileForUid(uid);if(!tile.querySelector('.vt-name')){const n=document.createElement('div');n.className='vt-name';n.textContent=p.nickname;tile.appendChild(n)}}
+// ★ 修正③：相手の映像を確実に描画
+function attachRemoteVideo(uid,stream){
+  let tile=document.getElementById('vtile-'+uid);
+  if(!tile){
+    tile=document.createElement('div');
+    tile.id='vtile-'+uid;
+    tile.className='video-tile';
+    document.getElementById('videoCallGrid').appendChild(tile);
+  }
+  let v=tile.querySelector('video');
+  if(!v){
+    v=document.createElement('video');
+    v.autoplay=true;
+    v.playsInline=true;
+    v.muted=false;
+    v.setAttribute('playsinline','');
+    tile.appendChild(v);
+  }
+  if(v.srcObject!==stream){
+    v.srcObject=stream;
+    v.play().catch(()=>{});
+  }
+  const p=getProfileForUid(uid);
+  if(!tile.querySelector('.vt-name')){
+    const n=document.createElement('div');
+    n.className='vt-name';
+    n.textContent=p.nickname;
+    tile.appendChild(n);
+  }
+}
 function renderVideoCallGrid(){const grid=document.getElementById('videoCallGrid');if(!grid)return;grid.innerHTML='';if(groupCallState.localStream){const tile=document.createElement('div');tile.className='video-tile';const v=document.createElement('video');v.autoplay=true;v.muted=true;v.playsInline=true;v.srcObject=groupCallState.localStream;tile.appendChild(v);const n=document.createElement('div');n.className='vt-name';n.textContent=(myProfile.nickname||'あなた')+'（あなた）';tile.appendChild(n);grid.appendChild(tile)}Object.entries(groupCallState.streams).forEach(([uid,stream])=>{if(stream)attachRemoteVideo(uid,stream)})}
 function updateGroupCallUI(){const count=document.getElementById('vcCount');if(count){const active=Object.values(groupCallState.joinedUids||{}).filter(p=>!p.leftAt).length;count.textContent=active+'人'}}
 document.getElementById('vcMinimizeBtn').addEventListener('click',()=>{document.getElementById('videoCallOverlay').classList.remove('show')});
